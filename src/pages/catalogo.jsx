@@ -19,8 +19,6 @@ const Catalogo = () => {
     telefono: '',
     email: ''
   });
-  const [carrito, setCarrito] = useState([]);
-  const [mostrarCarrito, setMostrarCarrito] = useState(false);
   
   // Estados para agregar producto (solo tienda)
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -102,58 +100,6 @@ const Catalogo = () => {
           return 0;
       }
     });
-
-  const agregarAlCarrito = (producto) => {
-    if (producto.inventario === 0) {
-      toast.warning('Producto agotado');
-      return;
-    }
-
-    const productoEnCarrito = carrito.find(p => p._id === producto._id);
-    
-    if (productoEnCarrito) {
-      if (productoEnCarrito.cantidad < producto.inventario) {
-        setCarrito(carrito.map(p =>
-          p._id === producto._id
-            ? { ...p, cantidad: p.cantidad + 1 }
-            : p
-        ));
-        toast.success('Cantidad actualizada');
-      } else {
-        toast.warning('No hay más stock disponible');
-      }
-    } else {
-      setCarrito([...carrito, { ...producto, cantidad: 1 }]);
-      toast.success('Producto agregado al carrito');
-    }
-  };
-
-  const eliminarDelCarrito = (productoId) => {
-    setCarrito(carrito.filter(p => p._id !== productoId));
-  };
-
-  const actualizarCantidad = (productoId, cantidad) => {
-    if (cantidad <= 0) {
-      eliminarDelCarrito(productoId);
-      return;
-    }
-
-    const producto = productos.find(p => p._id === productoId);
-    if (cantidad > producto.inventario) {
-      toast.warning('No hay suficiente stock');
-      return;
-    }
-
-    setCarrito(carrito.map(p =>
-      p._id === productoId
-        ? { ...p, cantidad }
-        : p
-    ));
-  };
-
-  const calcularTotal = () => {
-    return carrito.reduce((total, p) => total + (parseFloat(p.precio) * p.cantidad), 0);
-  };
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -393,12 +339,6 @@ const Catalogo = () => {
             )}
           </div>
         </div>
-        <button 
-          className="btn-carrito"
-          onClick={() => setMostrarCarrito(!mostrarCarrito)}
-        >
-          Carrito ({carrito.length})
-        </button>
         {esTienda && (
           <button 
             className="btn-agregar-producto"
@@ -614,89 +554,7 @@ const Catalogo = () => {
         </div>
       )}
 
-      {/* CARRITO LATERAL */}
-      {mostrarCarrito && (
-        <div className="carrito-sidebar">
-          <div className="carrito-header">
-            <h2>Tu Carrito</h2>
-            <button 
-              className="btn-cerrar-carrito"
-              onClick={() => setMostrarCarrito(false)}
-            >
-              X
-            </button>
-          </div>
 
-          {carrito.length === 0 ? (
-            <div className="carrito-vacio">
-              <p>Tu carrito está vacío</p>
-              <span>Agrega productos para continuar</span>
-            </div>
-          ) : (
-            <>
-              <div className="carrito-items">
-                {carrito.map(item => (
-                  <div key={item._id} className="carrito-item">
-                    <div className="item-info">
-                      <h4>{item.nombre}</h4>
-                      <p className="item-precio">${parseFloat(item.precio).toLocaleString('es-CO')}</p>
-                    </div>
-                    <div className="item-cantidad">
-                      <button 
-                        onClick={() => actualizarCantidad(item._id, item.cantidad - 1)}
-                        className="btn-cantidad"
-                      >
-                        −
-                      </button>
-                      <input 
-                        type="number"
-                        min="1"
-                        value={item.cantidad}
-                        onChange={(e) => actualizarCantidad(item._id, parseInt(e.target.value) || 1)}
-                        className="cantidad-input"
-                      />
-                      <button 
-                        onClick={() => actualizarCantidad(item._id, item.cantidad + 1)}
-                        className="btn-cantidad"
-                      >
-                        +
-                      </button>
-                    </div>
-                    <span className="item-total">
-                      ${(parseFloat(item.precio) * item.cantidad).toLocaleString('es-CO')}
-                    </span>
-                    <button 
-                      onClick={() => eliminarDelCarrito(item._id)}
-                      className="btn-eliminar-item"
-                      title="Eliminar"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-              </div>
-
-              <div className="carrito-resumen">
-                <div className="resumen-row">
-                  <span>Subtotal:</span>
-                  <span>${calcularTotal().toLocaleString('es-CO')}</span>
-                </div>
-                <div className="resumen-row">
-                  <span>Impuesto (19%):</span>
-                  <span>${(calcularTotal() * 0.19).toLocaleString('es-CO')}</span>
-                </div>
-                <div className="resumen-row total">
-                  <span>Total:</span>
-                  <span>${(calcularTotal() * 1.19).toLocaleString('es-CO')}</span>
-                </div>
-                <button className="btn-checkout">
-                  Proceder al Pago
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      )}
 
       {/* STATS */}
       <div className="catalogo-stats">
@@ -796,16 +654,9 @@ const Catalogo = () => {
                   )}
 
                   <div className="producto-info">
-                    <span className="precio">
+                    <span className="producto-precio">
                       ${parseFloat(producto.precio).toLocaleString('es-CO')}
                     </span>
-                    <button 
-                      className={`btn-agregar ${producto.inventario === 0 ? 'deshabilitado' : ''}`}
-                      onClick={() => agregarAlCarrito(producto)}
-                      disabled={producto.inventario === 0}
-                    >
-                      Agregar
-                    </button>
                   </div>
 
                   {esTienda && (
