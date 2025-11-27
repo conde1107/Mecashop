@@ -31,9 +31,10 @@ const pagoRoutes = require('./routes/pago');
 
 // ------------------- CORS (ANTES DE TODO) -------------------
 app.use(cors({
-  origin: "*",   // puedes poner 'http://localhost:5173' si quieres restringir
+  origin: ["http://localhost:5173", "https://mecashop-k4pc.vercel.app"],
   methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: "Content-Type,Authorization"
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true
 }));
 
 
