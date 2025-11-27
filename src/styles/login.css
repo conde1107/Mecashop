@@ -1,0 +1,418 @@
+/* ==================== CONTENEDOR PRINCIPAL ==================== */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #222 0%, #1a1a1a 100%);
+  padding: 1rem;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ==================== TARJETA DE LOGIN ==================== */
+.login-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 450px;
+  padding: 2.5rem 2rem;
+  box-sizing: border-box;
+  animation: slideUp 0.5s ease-out;
+}
+
+/* ==================== TÍTULOS ==================== */
+.login-title {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 0 0 0.3rem 0;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.login-title .highlight {
+  color: #c62828;
+  display: inline;
+}
+
+.login-subtitle {
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: #666;
+  text-align: center;
+  margin: 0 0 1.8rem 0;
+  line-height: 1.4;
+}
+
+/* ==================== FORMULARIO ==================== */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.login-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.login-input-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  display: block;
+}
+
+/* ==================== INPUTS ==================== */
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: #222;
+  background: #f9f9f9;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #c62828;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.1);
+}
+
+.input-wrapper input:disabled {
+  background: #f0f0f0;
+  border-color: #ddd;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.input-wrapper input::placeholder {
+  color: #999;
+}
+
+.icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: #999;
+  pointer-events: none;
+}
+
+/* ==================== BOTÓN ==================== */
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #c62828 0%, #e53935 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(198, 40, 40, 0.4);
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%);
+}
+
+.login-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(198, 40, 40, 0.3);
+}
+
+.login-button:disabled {
+  background: linear-gradient(135deg, #bbb 0%, #ccc 100%);
+  cursor: not-allowed;
+  opacity: 0.8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================== MENSAJES DE ERROR ==================== */
+.login-error-container {
+  padding: 1rem;
+  border-radius: 10px;
+  margin: 0.5rem 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+.login-error-container {
+  background: #ffebee;
+  border: 1px solid #ef5350;
+}
+
+.login-error-container.bloqueado {
+  background: #fff3e0;
+  border: 1px solid #ffb74d;
+}
+
+.login-error {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #d32f2f;
+  line-height: 1.4;
+}
+
+.login-error.bloqueado {
+  color: #e65100;
+  margin-bottom: 0.8rem;
+}
+
+.login-error.warning {
+  color: #f57f17;
+}
+
+.login-error.danger {
+  color: #d32f2f;
+}
+
+/* ==================== TIMER ==================== */
+.timer {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #e65100;
+  font-weight: 600;
+  text-align: center;
+  animation: pulse 1s infinite;
+  padding: 0.5rem 0;
+}
+
+.timer-value {
+  font-size: 1.2rem;
+  color: #d32f2f;
+  font-family: 'Courier New', 'Monaco', monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ==================== FOOTER ==================== */
+.login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.login-footer span {
+  color: #c62828;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.login-footer span:hover {
+  color: #e53935;
+  text-decoration: underline;
+}
+
+/* ==================== ANIMACIONES ==================== */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+/* ==================== RESPONSIVE - TABLETS (768px) ==================== */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 2rem 1.8rem;
+  }
+
+  .login-title {
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .login-form {
+    gap: 1.2rem;
+  }
+
+  .input-wrapper input {
+    padding: 0.85rem 1rem 0.85rem 2.6rem;
+    font-size: 0.95rem;
+  }
+
+  .login-button {
+    padding: 0.95rem;
+    font-size: 0.95rem;
+  }
+
+  .timer-value {
+    font-size: 1.1rem;
+  }
+}
+
+/* ==================== RESPONSIVE - MÓVILES (480px) ==================== */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem;
+    min-height: 100vh;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 1.5rem 1.2rem;
+    border-radius: 14px;
+  }
+
+  .login-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .login-form {
+    gap: 1rem;
+  }
+
+  .login-input-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .input-wrapper input {
+    padding: 0.75rem 0.8rem 0.75rem 2.4rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  .input-wrapper input:focus {
+    box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.15);
+  }
+
+  .icon {
+    font-size: 0.95rem;
+    left: 0.8rem;
+  }
+
+  .login-button {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  .login-error-container {
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin: 0.4rem 0;
+  }
+
+  .login-error {
+    font-size: 0.8rem;
+  }
+
+  .login-error.bloqueado {
+    margin-bottom: 0.6rem;
+  }
+
+  .timer {
+    font-size: 0.85rem;
+    padding: 0.4rem 0;
+  }
+
+  .timer-value {
+    font-size: 1rem;
+  }
+
+  .login-footer {
+    margin-top: 1.2rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ==================== RESPONSIVE - MÓVILES PEQUEÑOS (320px) ==================== */
+@media (max-width: 360px) {
+  .login-card {
+    padding: 1.3rem 1rem;
+  }
+
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.75rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .input-wrapper input {
+    padding: 0.7rem 0.7rem 0.7rem 2.2rem;
+    font-size: 0.85rem;
+  }
+
+  .login-button {
+    padding: 0.7rem;
+    font-size: 0.85rem;
+  }
+
+  .login-input-group label {
+    font-size: 0.75rem;
+  }
+
+  .icon {
+    font-size: 0.9rem;
+  }
+}

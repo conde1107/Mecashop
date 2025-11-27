@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 👇 Puedes agregar estilos globales si quieres */
+body {
+  @apply bg-gray-100 text-gray-900;
+  margin: 0;
+  padding: 0;
+  padding-top: 70px; /* Espacio para header fijo */
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}

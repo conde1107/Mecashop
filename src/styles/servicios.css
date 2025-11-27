@@ -1,0 +1,108 @@
+/* 🧾 Tabla de servicios */
+.tabla-servicios {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+.tabla-servicios th,
+.tabla-servicios td {
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 15px;
+}
+
+.tabla-servicios th {
+  background-color: #007bff;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-servicios tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* 🔗 Enlaces de informe */
+.tabla-servicios a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.tabla-servicios a:hover {
+  text-decoration: underline;
+}
+
+/* 📂 Input de archivo */
+input[type="file"] {
+  background: #f1f1f1;
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="file"]:hover {
+  background: #e8e8e8;
+}
+
+/* ✅ Botón de completar */
+.btn-completar {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.btn-completar:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+/* Estado completado */
+.tabla-servicios span {
+  font-weight: 600;
+  color: #28a745;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+  .tabla-servicios {
+    font-size: 14px;
+  }
+
+  .tabla-servicios th,
+  .tabla-servicios td {
+    padding: 8px;
+  }
+
+  .btn-completar {
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .tabla-servicios {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .tabla-servicios table {
+    width: 100%;
+    border: 0;
+  }
+
+  .tabla-servicios th,
+  .tabla-servicios td {
+    white-space: nowrap;
+  }
+}

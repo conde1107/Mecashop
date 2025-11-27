@@ -1,0 +1,199 @@
+/* Alertas de Vencimiento de Documentos */
+
+.alertas-vencimiento-container {
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+  border: 2px solid #ff6b6b;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.15);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alertas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.alertas-header h3 {
+  margin: 0;
+  color: #c92a2a;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btn-cerrar-alertas {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #c92a2a;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-cerrar-alertas:hover {
+  transform: scale(1.2);
+  color: #a61e1e;
+}
+
+.alertas-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.alerta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  background: white;
+  border-left: 4px solid #ff6b6b;
+}
+
+.alerta-item.alerta-vencido {
+  border-left-color: #c92a2a;
+  background: #fff5f5;
+}
+
+.alerta-item.alerta-critico {
+  border-left-color: #ff6b6b;
+  background: #fff5f5;
+}
+
+.alerta-item.alerta-proximo {
+  border-left-color: #ff9800;
+  background: #fff8e1;
+}
+
+.alerta-icono {
+  font-size: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.alerta-contenido {
+  flex: 1;
+}
+
+.alerta-titulo {
+  margin: 0 0 4px 0;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.alerta-detalle {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.alerta-fecha {
+  margin: 4px 0 0 0;
+  color: #c92a2a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.alertas-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.alertas-aviso {
+  margin: 0;
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+}
+
+.btn-ir-vehiculos {
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-ir-vehiculos:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.btn-ir-vehiculos:active {
+  transform: translateY(0);
+}
+
+/* Scroll para lista larga */
+.alertas-lista::-webkit-scrollbar {
+  width: 6px;
+}
+
+.alertas-lista::-webkit-scrollbar-track {
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 3px;
+}
+
+.alertas-lista::-webkit-scrollbar-thumb {
+  background: rgba(255, 107, 107, 0.3);
+  border-radius: 3px;
+}
+
+.alertas-lista::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 107, 107, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alertas-vencimiento-container {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+  .alertas-header h3 {
+    font-size: 14px;
+  }
+
+  .alerta-item {
+    padding: 10px;
+  }
+
+  .alerta-titulo {
+    font-size: 13px;
+  }
+
+  .alerta-detalle {
+    font-size: 11px;
+  }
+}

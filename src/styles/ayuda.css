@@ -1,0 +1,147 @@
+/* ===================================
+   AYUDA PAGE - ESTILOS
+=================================== */
+
+.ayuda-container {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-top: 80px;
+}
+
+.ayuda-hero {
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.ayuda-hero h1 {
+  font-size: 2.8rem;
+  margin: 0 0 15px 0;
+  font-weight: 700;
+}
+
+.ayuda-hero p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.ayuda-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* ===================================
+   SECCIONES
+=================================== */
+.ayuda-section {
+  margin-bottom: 50px;
+}
+
+.ayuda-section h2 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #374151;
+}
+
+/* ===================================
+   TARJETAS DE AYUDA
+=================================== */
+.ayuda-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ayuda-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.ayuda-card h3 {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+}
+
+.ayuda-card p {
+  font-size: 1.05rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 15px 0;
+}
+
+.ayuda-card ol,
+.ayuda-card ul {
+  font-size: 1.05rem;
+  color: #4b5563;
+  line-height: 1.8;
+  margin: 0 0 15px 0;
+  padding-left: 25px;
+}
+
+.ayuda-card li {
+  margin-bottom: 8px;
+}
+
+/* ===================================
+   ENLACES
+=================================== */
+.ayuda-link {
+  display: inline-block;
+  color: #374151;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  padding: 10px 20px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.ayuda-link:hover {
+  background: #374151;
+  color: white;
+  transform: translateX(5px);
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 768px) {
+  .ayuda-hero h1 {
+    font-size: 2rem;
+  }
+
+  .ayuda-hero p {
+    font-size: 1rem;
+  }
+
+  .ayuda-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .ayuda-card {
+    padding: 20px;
+  }
+
+  .ayuda-card h3 {
+    font-size: 1.3rem;
+  }
+
+  .ayuda-card p,
+  .ayuda-card ol,
+  .ayuda-card ul {
+    font-size: 0.95rem;
+  }
+}

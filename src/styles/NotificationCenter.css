@@ -1,0 +1,381 @@
+/* ===================================
+   NOTIFICATION CENTER
+=================================== */
+
+.notification-center {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffff;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.notification-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.notification-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+}
+
+/* Badge de notificaciones no leídas */
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #a83460;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  border: 2px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Dropdown */
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 380px;
+  max-height: 500px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin-top: 10px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notification-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.btn-mark-all {
+  padding: 6px 12px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-mark-all:hover {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+/* Lista de notificaciones */
+.notification-list {
+  overflow-y: auto;
+  flex: 1;
+  max-height: 400px;
+}
+
+.notification-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Item de notificación */
+.notification-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.notification-item:hover {
+  background: #f9fafb;
+}
+
+.notification-item.clickeable:hover {
+  background: #f0f8ff;
+  border-left-color: #2563eb;
+}
+
+.notification-item.no-leida {
+  background: #f8f9fa;
+  border-left: 4px solid #a83460;
+  padding-left: 12px;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+  word-break: break-word;
+}
+
+.notification-content p {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-line;
+  max-height: none;
+  overflow: visible;
+}
+
+.notification-content small {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.notification-content .notif-link {
+  display: block;
+  margin-top: 8px;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #d1d5db;
+  font-size: 24px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.btn-delete:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Scrollbar personalizado */
+.notification-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-list::-webkit-scrollbar-track {
+  background: #f9fafb;
+}
+
+.notification-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.notification-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===================================
+   ALERTA FLOTANTE DE VENCIMIENTO
+=================================== */
+.alerta-flotante-vencimiento {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
+  color: white;
+  z-index: 2000;
+  animation: slideInRight 0.5s ease-out, slideOutRight 0.5s ease-in 7.5s forwards;
+  max-width: 420px;
+  overflow: hidden;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(500px);
+    opacity: 0;
+  }
+}
+
+.alerta-contenido {
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.alerta-icono {
+  font-size: 28px;
+  flex-shrink: 0;
+  animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.alerta-texto {
+  flex: 1;
+  min-width: 0;
+}
+
+.alerta-texto h5 {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.alerta-texto p {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.95;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.alerta-cerrar {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.alerta-cerrar:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.alerta-ir-vehiculos {
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 0 0 8px 8px;
+}
+
+.alerta-ir-vehiculos:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alerta-flotante-vencimiento {
+    top: 70px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notification-dropdown {
+    width: 320px;
+    right: -20px;
+  }
+
+  .notification-content p {
+    font-size: 12px;
+  }
+}

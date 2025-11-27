@@ -1,0 +1,175 @@
+/* ===================================
+   SOLICITAR ACCESO - ESTILOS
+=================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.solicitar-acceso-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #222 0%, #1a1a1a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  padding-top: 100px;
+}
+
+.solicitar-acceso-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.solicitar-acceso-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px 0;
+  text-align: center;
+}
+
+.solicitar-acceso-subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.solicitar-acceso-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.form-group-acceso {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.form-label-acceso {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-input-acceso,
+.form-select-acceso,
+.form-textarea-acceso {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-input-acceso:focus,
+.form-select-acceso:focus,
+.form-textarea-acceso:focus {
+  outline: none;
+  border-color: #6b7280;
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
+}
+
+.form-textarea-acceso {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-submit-acceso {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #c62828 0%, #d32f2f 100%) !important;
+  color: white !important;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
+}
+
+.btn-submit-acceso:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(198, 40, 40, 0.4);
+  background: linear-gradient(135deg, #b71c1c 0%, #d32f2f 100%) !important;
+}
+
+.btn-submit-acceso:disabled {
+  background: linear-gradient(135deg, #bbb 0%, #ccc 100%) !important;
+  cursor: not-allowed;
+  opacity: 0.8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mensaje-box {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.mensaje-success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.mensaje-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.back-to-login-acceso {
+  margin-top: 30px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.back-to-login-btn-acceso {
+  background: none;
+  border: none;
+  color: #374151;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.back-to-login-btn-acceso:hover {
+  color: #1f2937;
+  text-decoration: underline;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
+@media (max-width: 768px) {
+  .solicitar-acceso-card {
+    padding: 30px 20px;
+  }
+
+  .solicitar-acceso-title {
+    font-size: 1.5rem;
+  }
+
+  .solicitar-acceso-subtitle {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,246 @@
+/* 🎨 ESTILOS PARA CITAS DEL MECÁNICO */
+
+body {
+  background-color: #f8f9fb;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.citas-mecanico-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== TÍTULO ===== */
+.citas-mecanico-container h2 {
+  text-align: center;
+  color: #7e7e7e;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* ===== MENSAJE SIN CITAS ===== */
+.citas-mecanico-container p {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+}
+
+/* ===== TABLA ===== */
+.tabla-citas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-citas th,
+.tabla-citas td {
+  border: 1px solid #e0e0e0;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.tabla-citas th {
+  background-color: #858585;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabla-citas tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tabla-citas tr:hover {
+  background-color: #f1f5ff;
+  transition: background 0.2s;
+}
+
+/* ===== BOTONES ===== */
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 3px;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* ===== COLORES DE BOTONES ===== */
+button:nth-child(1) {
+  background-color: #5f5f5f; /* Aceptar */
+}
+
+button:nth-child(1):hover {
+  background-color: #c41f1f;
+}
+
+button:nth-child(2) {
+  background-color: #dc3545; /* Rechazar */
+}
+
+button:nth-child(2):hover {
+  background-color: #b52a37;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ===== ESTADO FINALIZADO / RECHAZADO ===== */
+.tabla-citas span {
+  color: #555;
+  font-weight: 500;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .citas-mecanico-container {
+    padding: 15px;
+    margin: 20px;
+  }
+
+  .tabla-citas {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tabla-citas th,
+  .tabla-citas td {
+    font-size: 13px;
+    padding: 10px 8px;
+  }
+
+  button {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+.citas-mecanico-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+}
+
+.citas-mecanico-container h2 {
+  text-align: center;
+  color: #707274;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+}
+
+/* === Tabla === */
+.tabla-servicios {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-servicios thead {
+  background-color: #575757;
+  color: #fff;
+}
+
+.tabla-servicios th,
+.tabla-servicios td {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.tabla-servicios th {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tabla-servicios tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background 0.3s ease;
+}
+
+.tabla-servicios tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.tabla-servicios tbody tr:hover {
+  background-color: #e8f4fd;
+}
+
+/* === Botones === */
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+/* === Archivos PDF === */
+a {
+  color: #27ae60;
+  text-decoration: none;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+input[type="file"] {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+}
+
+/* === Estado === */
+td span {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+td span {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* === Subiendo === */
+p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+  

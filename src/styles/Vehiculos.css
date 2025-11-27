@@ -1,0 +1,66 @@
+/* Vehiculo.css */
+
+.vehiculo-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.vehiculo-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.vehiculo-info p {
+  margin: 0.6rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.vehiculo-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.vehiculo-form input,
+.vehiculo-form select {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.3rem;
+}
+
+.vehiculo-botones {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+
+.vehiculo-botones button {
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+}
+
+.vehiculo-botones button:first-child {
+  background-color: #28a745;
+}
+
+.vehiculo-botones button:last-child {
+  background-color: #dc3545;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+}

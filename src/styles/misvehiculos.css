@@ -1,0 +1,923 @@
+/* ======================= CONTENEDOR PRINCIPAL ======================= */
+.perfil-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* ======================= SECCIÓN VEHÍCULOS ======================= */
+.vehiculos-section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.vehiculos-header {
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.vehiculos-titulo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* ======================= FORMULARIO AGREGAR VEHÍCULO ======================= */
+.agregar-vehiculo-container {
+  margin-bottom: 30px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.agregar-vehiculo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.form-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 34px;
+  min-width: 0;
+}
+
+.input-group label {
+  width: 100%;
+  padding: 4px 8px 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-align: left;
+  background: #f9f9f9;
+}
+
+.input-group.with-label {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.input-group.with-label > input,
+.input-group.with-label > select {
+  border-top: 1px solid #eee;
+}
+
+.input-group:not(:has(label)) {
+  flex-direction: row;
+}
+
+.input-group:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+.input-icon {
+  padding: 0 8px;
+  color: #666;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.input-group input,
+.input-group select {
+  flex: 1;
+  padding: 6px 10px;
+  border: none;
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+.input-group select {
+  padding-right: 8px;
+  appearance: none;
+  cursor: pointer;
+}
+
+.input-group select::after {
+  content: '▼';
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-top: 3px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+}
+
+.cargar-imagen-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.cargar-imagen-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-seleccionar-archivo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: #1f2937;
+  color: #ffffff;
+  border: 2px solid #1f2937;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-seleccionar-archivo:hover {
+  background: #374151;
+  border-color: #374151;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-seleccionar-archivo input {
+  display: none !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  pointer-events: none !important;
+}
+
+.archivo-seleccionado {
+  font-size: 13px;
+  color: #059669;
+  font-weight: 500;
+}
+
+.btn-agregar-vehiculo {
+  padding: 6px 16px;
+  background: #a83460;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  justify-self: end;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-agregar-vehiculo:hover {
+  background: #932d52;
+}
+
+/* ======================= GRILLA DE VEHÍCULOS ======================= */
+.vehiculos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.vehiculo-card-new {
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e8e8e8;
+}
+
+.vehiculo-card-new.activo {
+  border: 2px solid #2563eb;
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+  transform: scale(1.02);
+}
+
+.vehiculo-card-new:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.vehiculo-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+}
+
+.vehiculo-img-new {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vehiculo-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+}
+
+/* PLACA BADGE */
+.vehiculo-placa-badge {
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.placa-numero {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #e8f4f8 0%, #d4e8f0 100%);
+  color: #0066cc;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  border: 2px solid #0066cc;
+  min-width: 100px;
+  justify-content: center;
+}
+
+/* DETALLES DEL VEHÍCULO */
+.vehiculo-details {
+  padding: 12px 16px;
+  flex: 1;
+  background: #fff;
+}
+
+.detail-item {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.detail-item strong {
+  color: #666;
+  font-weight: 600;
+}
+
+/* INFORMACIÓN DE MANTENIMIENTO */
+.mantenimiento-info {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-left: 3px solid #a83460;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.mantenimiento-info strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #a83460;
+  font-weight: 700;
+}
+
+.mini-detail {
+  margin: 4px 0;
+  font-size: 11px;
+  color: #555;
+  line-height: 1.3;
+}
+
+.mini-detail strong {
+  color: #333;
+  font-weight: 600;
+  display: inline;
+}
+
+/* SERVICIOS COMPLETADOS CON PDFs */
+.servicios-completados-info {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f0f9ff;
+  border-left: 3px solid #0066cc;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.servicios-completados-info strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #0066cc;
+  font-weight: 700;
+}
+
+.servicio-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: #fff;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  border: 1px solid #cce5ff;
+}
+
+.servicio-detalles {
+  flex: 1;
+}
+
+.servicio-nombre {
+  margin: 0;
+  font-weight: 600;
+  color: #0066cc;
+  font-size: 11px;
+}
+
+.servicio-mecanico {
+  margin: 2px 0 0 0;
+  font-size: 10px;
+  color: #666;
+}
+
+.servicio-fecha {
+  margin: 2px 0 0 0;
+  font-size: 10px;
+  color: #999;
+}
+
+.btn-ver-pdf {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #0066cc;
+  color: white;
+  text-decoration: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.btn-ver-pdf:hover {
+  background: #0052a3;
+  transform: scale(1.05);
+}
+
+/* BOTONES DE ACCIÓN */
+.vehiculo-actions-new {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.btn-action-documento,
+.btn-action-editar,
+.btn-action-fechas,
+.btn-action-eliminar {
+  padding: 9px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-action-documento {
+  background: #f0f8ff;
+  color: #0066cc;
+  border: 1px solid #cce5ff;
+}
+
+.btn-action-documento:hover {
+  background: #e0f0ff;
+}
+
+.btn-action-editar {
+  background: #fff8f0;
+  color: #ff9800;
+  border: 1px solid #ffe8cc;
+}
+
+.btn-action-editar:hover {
+  background: #ffe8f0;
+}
+
+.btn-action-fechas {
+  background: #f0fff4;
+  color: #059669;
+  border: 1px solid #d1fae5;
+}
+
+.btn-action-fechas:hover {
+  background: #dcfce7;
+}
+
+.btn-action-eliminar {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.btn-action-eliminar:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+/* ======================= ESTADOS VACÍO Y CARGANDO ======================= */
+.vehiculos-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 16px;
+}
+
+.vehiculos-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0066cc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ======================= MODAL ======================= */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-body label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.modal-body input,
+.modal-body select {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.modal-body input:focus,
+.modal-body select:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-guardar {
+  padding: 10px 20px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-guardar:hover {
+  background: #218838;
+}
+
+.btn-cancelar {
+  padding: 10px 20px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar:hover {
+  background: #5a6268;
+}
+
+/* ======================= RESPONSIVE ======================= */
+@media (max-width: 1024px) {
+  .form-inputs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .vehiculos-section {
+    padding: 15px;
+  }
+
+  .vehiculos-titulo {
+    font-size: 18px;
+  }
+
+  .form-inputs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-agregar-vehiculo {
+    justify-self: stretch;
+  }
+
+  .vehiculos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vehiculo-card-new {
+    margin-bottom: 5px;
+  }
+
+  .vehiculo-actions-new {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .btn-action-documento,
+  .btn-action-editar,
+  .btn-action-fechas,
+  .btn-action-mantenimientos {
+    flex: 1;
+  }
+}
+
+/* ======================= MODAL MANTENIMIENTOS ======================= */
+.mantenimientos-modal {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0066cc;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+}
+
+.servicios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.servicio-item-modal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border-left: 4px solid #0066cc;
+}
+
+.servicio-detalles-modal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.servicio-nombre {
+  margin: 0;
+  font-weight: 600;
+  color: #0066cc;
+  font-size: 12px;
+}
+
+.servicio-mecanico,
+.servicio-fecha {
+  margin: 0;
+  font-size: 11px;
+  color: #666;
+}
+
+.servicio-botones-modal {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: 10px;
+}
+
+.mantenimientos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mantenimiento-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  border-left: 4px solid #ff9800;
+}
+
+.mant-detalles {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mant-tipo,
+.mant-km,
+.mant-fecha,
+.mant-desc {
+  margin: 0;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.3;
+}
+
+.mant-tipo strong,
+.mant-km strong,
+.mant-fecha strong,
+.mant-desc strong {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.mant-botones {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: 10px;
+}
+
+.btn-ver-pdf-mant,
+.btn-descargar-pdf-mant {
+  display: inline-block;
+  padding: 4px 10px;
+  color: white;
+  text-decoration: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-ver-pdf-mant {
+  background: #0066cc;
+}
+
+.btn-ver-pdf-mant:hover {
+  background: #0052a3;
+  transform: scale(1.05);
+}
+
+.btn-descargar-pdf-mant {
+  background: #28a745;
+}
+
+.btn-descargar-pdf-mant:hover {
+  background: #218838;
+  transform: scale(1.05);
+}
+
+.sin-mantenimientos {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-style: italic;
+}
+
+.btn-action-mantenimientos {
+  background: #ff9800;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.btn-action-mantenimientos:hover {
+  background: #e68900;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+/* ======================= RESPONSIVE MÓVIL ======================= */
+@media (max-width: 480px) {
+  .perfil-container {
+    padding: 10px;
+  }
+
+  .vehiculos-section {
+    padding: 12px;
+    border-radius: 6px;
+  }
+
+  .vehiculos-titulo {
+    font-size: 16px;
+  }
+
+  .agregar-vehiculo-container {
+    padding: 12px;
+  }
+
+  .form-inputs {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .input-group {
+    min-height: 40px;
+  }
+
+  .input-group label {
+    font-size: 10px;
+    padding: 3px 6px 1px 6px;
+  }
+
+  .input-group input,
+  .input-group select {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .form-actions {
+    gap: 8px;
+    padding-top: 6px;
+  }
+
+  .cargar-imagen-section {
+    gap: 6px;
+  }
+
+  .btn-seleccionar-archivo {
+    padding: 8px 16px;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .btn-agregar-vehiculo {
+    padding: 8px 14px;
+    font-size: 11px;
+    width: 100%;
+  }
+
+  .vehiculo-card-new {
+    padding: 12px;
+    margin-bottom: 8px;
+  }
+
+  .vehiculo-imagen-new {
+    width: 80px;
+    height: 80px;
+  }
+
+  .vehiculo-info-new h3 {
+    font-size: 14px;
+  }
+
+  .vehiculo-info-new p {
+    font-size: 11px;
+  }
+
+  .vehiculo-actions-new {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .btn-action-documento,
+  .btn-action-editar,
+  .btn-action-fechas,
+  .btn-action-mantenimientos {
+    font-size: 11px;
+    padding: 6px 10px;
+    width: 100%;
+  }
+
+  .modal-content-custom {
+    width: 95%;
+    padding: 15px;
+    max-height: 85vh;
+  }
+
+  .modal-header-custom h2 {
+    font-size: 16px;
+  }
+
+  .modal-close-custom {
+    font-size: 20px;
+    padding: 4px 8px;
+  }
+
+  .modal-body-custom {
+    padding: 10px;
+  }
+
+  .section-title {
+    font-size: 12px;
+  }
+
+  .servicio-item {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  .btn-ver-pdf-mant,
+  .btn-descargar-pdf-mant {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
+

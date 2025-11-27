@@ -1,0 +1,233 @@
+.directorio-container {
+  padding: 100px 40px 40px;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+.directorio-container h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1f2937;
+  font-weight: bold;
+}
+
+.busqueda-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.busqueda-container input {
+  width: 300px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+}
+
+.busqueda-container select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+}
+
+.filtros-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 25px;
+}
+
+.filtro {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+}
+
+.filtro label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #374151;
+}
+
+.filtro select,
+.filtro input {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: white;
+}
+
+.resultados-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  padding: 20px 0;
+}
+
+.taller-card {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.taller-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.taller-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.taller-info {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.taller-info h3 {
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.taller-info p {
+  margin: 5px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.taller-info p strong {
+  color: #374151;
+}
+
+.estado-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.estado-badge.activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.estado-badge.inactivo {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.btn-ver-perfil {
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.btn-ver-perfil:hover {
+  background: #b71c1c;
+}
+
+.btn-ver-perfil:active {
+  transform: scale(0.98);
+}
+
+.no-resultados {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .resultados-container {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .taller-card img {
+    height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .directorio-container {
+    padding: 20px;
+  }
+
+  .resultados-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+  }
+
+  .taller-card img {
+    height: 180px;
+  }
+
+  .taller-info {
+    padding: 14px;
+  }
+
+  .taller-info h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  .taller-info p {
+    font-size: 13px;
+  }
+
+  .busqueda-container input {
+    width: 100%;
+  }
+
+  .busqueda-container select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .directorio-container {
+    padding: 20px;
+  }
+
+  .resultados-container {
+    grid-template-columns: 1fr;
+  }
+
+  .taller-card img {
+    height: 200px;
+  }
+
+  .busqueda-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .busqueda-container input,
+  .busqueda-container select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,58 @@
+/* historialMantenimiento.css */
+
+.historial-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  font-family: 'Arial', sans-serif;
+}
+
+.historial-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.historial-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historial-table th,
+.historial-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.historial-table th {
+  background-color: #007BFF;
+  color: white;
+}
+
+.historial-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.historial-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.historial-btn {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: #28A745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.historial-btn:hover {
+  background-color: #218838;
+}

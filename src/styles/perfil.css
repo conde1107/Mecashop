@@ -1,0 +1,157 @@
+/* Perfil.css */
+
+.perfil-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.perfil-foto {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.perfil-foto img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.perfil-info p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+.perfil-info button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.perfil-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.perfil-form input,
+.perfil-form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.3rem;
+}
+
+.perfil-form textarea {
+  resize: vertical;
+}
+
+.perfil-botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.perfil-botones button {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.perfil-botones button:first-child {
+  background-color: #28a745;
+  color: white;
+}
+
+.perfil-botones button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* ======================= RESPONSIVE ======================= */
+@media (max-width: 768px) {
+  .perfil-container {
+    margin: 20px auto;
+    padding: 1.5rem;
+  }
+
+  .perfil-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .perfil-foto img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .perfil-info p {
+    font-size: 0.95rem;
+  }
+
+  .perfil-form input,
+  .perfil-form textarea {
+    padding: 0.5rem;
+    font-size: 14px;
+  }
+
+  .perfil-botones {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .perfil-botones button {
+    width: 100%;
+    padding: 0.6rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-container {
+    margin: 10px;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .perfil-container h2 {
+    font-size: 1.3rem;
+  }
+
+  .perfil-foto img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .perfil-info p {
+    font-size: 0.9rem;
+  }
+
+  .perfil-form label {
+    font-size: 14px;
+  }
+
+  .perfil-form input,
+  .perfil-form textarea {
+    padding: 0.4rem;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,469 @@
+/* 📦 MIS ÓRDENES PAGE STYLES */
+
+.mis-ordenes-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.mis-ordenes-container.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mis-ordenes-container.loading p {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: #666;
+  margin-top: 1rem;
+}
+
+/* HEADER */
+.ordenes-header {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.page-title {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  color: #666;
+  margin: 0;
+}
+
+/* ERROR BANNER */
+.error-banner {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  padding: 1rem;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #991b1b;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  max-width: 500px;
+  margin: 3rem auto;
+  text-align: center;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.empty-icon {
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ÓRDENES LIST */
+.ordenes-list {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.orden-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-left: 4px solid #059669;
+}
+
+.orden-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+/* ORDEN HEADER */
+.orden-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.orden-info {
+  flex: 1;
+}
+
+.orden-reference {
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  font-family: "Courier New", monospace;
+}
+
+.orden-fecha {
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  color: #666;
+  margin: 0.25rem 0 0 0;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.status-approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.status-declined {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-badge.status-procesando {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* ORDEN CONTENT */
+.orden-content {
+  padding: 1.25rem;
+}
+
+.items-section {
+  margin-bottom: 1rem;
+}
+
+.items-section h4 {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 0.75rem 0;
+}
+
+.items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.items-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem;
+  background: #f9fafb;
+  border-radius: 6px;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.items-list li span:first-child {
+  color: #555;
+  flex: 1;
+}
+
+.items-list li span:last-child {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* ORDEN AMOUNT */
+.orden-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 1rem;
+}
+
+.amount-label {
+  font-weight: 600;
+  color: #555;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+}
+
+.amount-value {
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  color: #059669;
+}
+
+/* BOTONES */
+.btn {
+  padding: clamp(0.75rem, 3vw, 1rem);
+  border: none;
+  border-radius: 8px;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(5, 150, 105, 0.4);
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #555;
+  border: 1px solid #e5e7eb;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.back-button {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* SPINNER */
+.spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(5, 150, 105, 0.2);
+  border-radius: 50%;
+  border-top-color: #059669;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* TABLETS (768px) */
+@media (max-width: 768px) {
+  .mis-ordenes-container {
+    padding: 1rem;
+  }
+
+  .orden-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .status-badge {
+    align-self: flex-start;
+  }
+
+  .ordenes-list {
+    gap: 1rem;
+  }
+}
+
+/* MOBILE (480px) */
+@media (max-width: 480px) {
+  .mis-ordenes-container {
+    padding: 0.75rem;
+  }
+
+  .ordenes-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .empty-state {
+    padding: 1.75rem;
+    margin: 2rem auto;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-state h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .empty-state p {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .orden-card {
+    border-left-width: 3px;
+  }
+
+  .orden-header {
+    padding: 1rem;
+  }
+
+  .orden-reference {
+    font-size: 1rem;
+  }
+
+  .orden-fecha {
+    font-size: 0.8rem;
+  }
+
+  .orden-content {
+    padding: 1rem;
+  }
+
+  .items-list li {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .orden-amount {
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  .amount-label {
+    font-size: 0.95rem;
+  }
+
+  .amount-value {
+    font-size: 1.2rem;
+  }
+
+  .btn {
+    padding: 0.85rem;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+}
+
+/* SMALL PHONES (360px) */
+@media (max-width: 360px) {
+  .mis-ordenes-container {
+    padding: 0.5rem;
+  }
+
+  .page-title {
+    font-size: 1.2rem;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+  }
+
+  .empty-state {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+  }
+
+  .empty-icon {
+    font-size: 2rem;
+  }
+
+  .empty-state h2 {
+    font-size: 1.1rem;
+  }
+
+  .orden-header {
+    padding: 0.85rem;
+  }
+
+  .orden-reference {
+    font-size: 0.9rem;
+  }
+
+  .orden-fecha {
+    font-size: 0.75rem;
+  }
+
+  .status-badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+  }
+
+  .orden-content {
+    padding: 0.85rem;
+  }
+
+  .items-list li {
+    padding: 0.4rem;
+    font-size: 0.8rem;
+  }
+
+  .items-section h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .orden-amount {
+    gap: 0.5rem;
+  }
+
+  .amount-label {
+    font-size: 0.85rem;
+  }
+
+  .amount-value {
+    font-size: 1rem;
+  }
+}
