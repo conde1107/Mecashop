@@ -23,32 +23,43 @@ exports.forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    // Validar variables de entorno necesarias
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error('❌ EMAIL_USER o EMAIL_PASS no configurados en variables de entorno');
-      return res.status(500).json({ msg: 'Error del servidor: servicio de correo no configurado.' });
-    }
+    // Configurar transporte de correo.
+    // Si se definen EMAIL_HOST/EMAIL_PORT/EMAIL_SECURE en el entorno, úsalos (por ejemplo SendGrid SMTP).
+    // Si no, caeremos en el servicio 'gmail' para compatibilidad con la configuración anterior.
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
+    const emailHost = process.env.EMAIL_HOST;
+    const emailPort = process.env.EMAIL_PORT;
+    const emailSecure = process.env.EMAIL_SECURE === 'true';
 
-    if (!process.env.FRONTEND_URL) {
-      console.error('❌ FRONTEND_URL no configurado en variables de entorno');
-      return res.status(500).json({ msg: 'Error del servidor: FRONTEND_URL no configurado.' });
-    }
-
-    // Configurar transporte de correo con Gmail (o SMTP según variables)
     let transporter;
-    try {
+    if (emailHost && emailPort) {
+      transporter = nodemailer.createTransport({
+        host: emailHost,
+        port: parseInt(emailPort, 10),
+        secure: !!emailSecure,
+        auth: {
+          user: emailUser,
+          pass: emailPass,
+        },
+        tls: { rejectUnauthorized: false }
+      });
+    } else {
       transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: emailUser,
+          pass: emailPass,
         },
       });
-      // Verificar configuración del transporte (opcional)
+    }
+
+    // Intentar verificar el transporte antes de enviar para capturar errores de conexión temprano
+    try {
       await transporter.verify();
-    } catch (err) {
-      console.error('❌ Error configurando transporte de correo:', err);
-      return res.status(500).json({ msg: 'Error configurando servicio de correo.' });
+    } catch (verifyErr) {
+      console.error('❌ Error verificando transporte SMTP:', verifyErr);
+      return res.status(500).json({ msg: 'Error de configuración SMTP.' });
     }
 
     const html = `
@@ -65,20 +76,15 @@ exports.forgotPassword = async (req, res) => {
         <p style="color: #999; font-size: 12px;">Si no solicitaste cambiar tu contraseña, no hagas clic en el enlace.</p>
       </div>
     `;
-    try {
-      await transporter.sendMail({
-        from: `"Soporte Mecashop" <${process.env.EMAIL_USER}>`,
-        to: correo,
-        subject: '🔐 Recuperación de contraseña - Mecashop',
-        html,
-      });
 
-      res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
-    } catch (err) {
-      console.error('❌ Error enviando correo:', err);
-      // Devolver mensaje con más detalles para facilitar depuración (no exponer secretos)
-      return res.status(500).json({ msg: 'Error enviando el correo. Revisa la configuración del servicio de correo.' });
-    }
+    await transporter.sendMail({
+      from: `"Soporte Mecashop" <${process.env.EMAIL_USER}>`,
+      to: correo,
+      subject: '🔐 Recuperación de contraseña - Mecashop',
+      html,
+    });
+
+    res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
   } catch (error) {
     console.error('❌ Error en forgotPassword:', error);
     res.status(500).json({ msg: 'Error enviando el correo.' });

@@ -28,31 +28,37 @@ const directorioRoutes = require("./routes/directorio");
 const debugRoutes = require('./routes/debug');
 const pagoRoutes = require('./routes/pago');
 
+// --- DEBUG TEMPORAL: inspeccionar imports de rutas antes de montarlas ---
+try {
+  const routeInspect = { authRoutes, routes, passwordRoutes, vehiculoRoutes, usuarioRoutes, adminRoutes, directorioRoutes, debugRoutes, pagoRoutes };
+  Object.entries(routeInspect).forEach(([name, val]) => {
+    try {
+      const info = { type: typeof val };
+      if (typeof val === 'string') {
+        info.sample = val.length > 120 ? val.slice(0, 120) + '...' : val;
+      } else if (val && typeof val === 'object') {
+        // list up to 5 keys to avoid huge logs
+        info.keys = Object.keys(val).slice(0, 5);
+      } else if (typeof val === 'function') {
+        info.fnName = val.name || null;
+      }
+      console.log('DEBUG_ROUTE:', name, JSON.stringify(info));
+    } catch (inner) {
+      console.log('DEBUG_ROUTE_ERROR inspecting', name, inner && inner.message);
+    }
+  });
+} catch (err) {
+  console.error('DEBUG_ROUTE_ERROR:', err && err.message);
+}
+
 
 // ------------------- CORS (ANTES DE TODO) -------------------
-// CORS configurable: permite localhost y el FRONTEND_URL definido en entorno
-const allowedOrigins = [
-  'http://localhost:5173',
-  process.env.FRONTEND_URL || 'https://mecashop-k4pc.vercel.app'
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    // Permitir peticiones desde herramientas (curl, Postman) sin origin
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      return callback(null, true);
-    }
-    // Rechazar otros orígenes
-    return callback(new Error('CORS policy: origin not allowed'), false);
-  },
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
-  allowedHeaders: 'Content-Type,Authorization',
+  origin: ["http://localhost:5173", "https://mecashop-k4pc.vercel.app"],
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization",
   credentials: true
 }));
-
-// Manejar preflight requests explícitamente
-app.options('*', cors());
 
 
 // ------------------- BODY PARSERS -------------------
@@ -102,15 +108,28 @@ app.get('/', (req, res) => {
 
 
 // ------------------- RUTAS DE API -------------------
-app.use('/api/auth', authRoutes);
-app.use('/api', routes);
-app.use('/api/password', passwordRoutes);
-app.use('/api/usuario', usuarioRoutes);
-app.use('/api/vehiculo', vehiculoRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/directorio', directorioRoutes);
-app.use('/api/debug', debugRoutes);
-app.use('/api/pagos', pagoRoutes);
+// Safe mounting helper to surface which mount throws path parsing errors
+const safeMount = (mountPath, routerObj, name) => {
+  try {
+    app.use(mountPath, routerObj);
+  } catch (err) {
+    console.error(`❌ Error montando ruta ${name || mountPath}:`, err && err.message ? err.message : err);
+    // print a helpful hint if the error originates from path-to-regexp
+    if (err && err.message && err.message.includes('Missing parameter name')) {
+      console.error('🔍 Posible ruta malformada dentro del router o un string accidental como ruta.');
+    }
+  }
+};
+
+safeMount('/api/auth', authRoutes, 'authRoutes');
+safeMount('/api', routes, 'routes (index)');
+safeMount('/api/password', passwordRoutes, 'passwordRoutes');
+safeMount('/api/usuario', usuarioRoutes, 'usuarioRoutes');
+safeMount('/api/vehiculo', vehiculoRoutes, 'vehiculoRoutes');
+safeMount('/api/admin', adminRoutes, 'adminRoutes');
+safeMount('/api/directorio', directorioRoutes, 'directorioRoutes');
+safeMount('/api/debug', debugRoutes, 'debugRoutes');
+safeMount('/api/pagos', pagoRoutes, 'pagoRoutes');
 
 
 // ------------------- MANEJO DE TOKENS -------------------
@@ -136,32 +155,23 @@ app.use((err, req, res, next) => {
 });
 
 
-// ------------------- CONEXIÓN A MONGO (opcional) -------------------
-if (MONGODB_URI) {
-  mongoose.connect(MONGODB_URI)
-    .then(() => {
-      console.log('✅ Conectado a MongoDB');
-
-      // Iniciar servicios programados (cron jobs)
-      iniciarCronjobs();
-
-      app.listen(PORT, '0.0.0.0', () => {
-        console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-      });
-    })
-    .catch((error) => {
-      console.error('❌ Error conectando a MongoDB:', error.message);
-      // Si la conexión falla, iniciar el servidor igualmente para evitar que el proceso termine
-      console.warn('⚠️ Iniciando servidor sin conexión a MongoDB (modo degradado)');
-      iniciarCronjobs();
-      app.listen(PORT, '0.0.0.0', () => {
-        console.log(`🚀 Servidor corriendo (sin MongoDB) en http://localhost:${PORT}`);
-      });
+// ------------------- CONEXIÓN A MONGO -------------------
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('✅ Conectado a MongoDB');
+    
+    // Iniciar servicios programados (cron jobs)
+    iniciarCronjobs();
+    
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
     });
-} else {
-  console.warn('⚠️ MONGODB_URI no configurada. Iniciando servidor sin conexión a MongoDB (modo degradado)');
-  iniciarCronjobs();
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Servidor corriendo (sin MongoDB) en http://localhost:${PORT}`);
+  })
+  .catch((error) => {
+    console.error('❌ Error conectando a MongoDB:', error.message);
+    console.log('⚠️ Iniciando servidor sin conexión a MongoDB (modo degradado).');
+    // In degraded mode we still start the server so PaaS (Render) sees a running process.
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Servidor corriendo en modo degradado en http://localhost:${PORT}`);
+    });
   });
-}

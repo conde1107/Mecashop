@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middleware/auth');
+const nodemailer = require('nodemailer');
 
 // Route to inspect decoded token and headers for debugging
 router.get('/whoami', verifyToken, (req, res) => {
@@ -49,3 +50,47 @@ router.put('/mecanicos/:id/disponible', async (req, res) => {
 });
 
 module.exports = router;
+
+// ------------------- SMTP TEST (guarded) -------------------
+// POST /api/debug/test-smtp
+// Enable by setting DEBUG_ALLOW_SMTP_TEST=true in environment (only temporary)
+router.post('/test-smtp', async (req, res) => {
+  try {
+    if (process.env.DEBUG_ALLOW_SMTP_TEST !== 'true') {
+      return res.status(403).json({ mensaje: 'Prueba SMTP deshabilitada en este entorno.' });
+    }
+
+    const emailUser = process.env.EMAIL_USER;
+    const emailPass = process.env.EMAIL_PASS;
+    const emailHost = process.env.EMAIL_HOST;
+    const emailPort = process.env.EMAIL_PORT;
+    const emailSecure = process.env.EMAIL_SECURE === 'true';
+
+    let transporter;
+    if (emailHost && emailPort) {
+      transporter = nodemailer.createTransport({
+        host: emailHost,
+        port: parseInt(emailPort, 10),
+        secure: !!emailSecure,
+        auth: { user: emailUser, pass: emailPass },
+        tls: { rejectUnauthorized: false }
+      });
+    } else {
+      transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: { user: emailUser, pass: emailPass }
+      });
+    }
+
+    try {
+      await transporter.verify();
+      return res.json({ ok: true, mensaje: 'Conexión SMTP verificada correctamente.' });
+    } catch (err) {
+      console.error('[debug/test-smtp] Error verificando SMTP:', err && err.message ? err.message : err);
+      return res.status(500).json({ ok: false, mensaje: 'Error verificando SMTP', detalle: err && err.message ? err.message : 'sin detalle' });
+    }
+  } catch (err) {
+    console.error('[debug/test-smtp] Unexpected error:', err);
+    return res.status(500).json({ ok: false, mensaje: 'Error interno al probar SMTP' });
+  }
+});
