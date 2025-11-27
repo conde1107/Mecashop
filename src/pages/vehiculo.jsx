@@ -1,6 +1,6 @@
 //pages/Vehiculo.jsx
 import React, { useState, useEffect } from 'react';
-import './Vehiculo.css';
+import '../styles/Vehiculos.css';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const Vehiculo = ({ obtenerVehiculoPorId, actualizarVehiculo }) => {

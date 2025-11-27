@@ -1,6 +1,6 @@
 //pages/servicio.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/CitasMecanico.css";
+import "../styles/citasmecanico.css";
 
 const ServiciosMecanico = () => {
   const [grupos, setGrupos] = useState([]);

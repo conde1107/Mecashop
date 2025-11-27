@@ -1,6 +1,6 @@
 // src/pages/SolicitarCita.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/solicitarCita.css";
+import "../styles/solicitarcita.css";
 
 const API_BASE = "http://localhost:3000/api";
 
