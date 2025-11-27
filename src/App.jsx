@@ -3,23 +3,23 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // 🔹 Componentes y páginas
 import Header from "./components/header.jsx";
-import Login from "./pages/Login.jsx";
+import Login from "./pages/login.jsx";
 import Register from "./pages/Register.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
-import Products from "./pages/Products.jsx";
-import ProductoDetalle from "./pages/ProductoDetalle.jsx";
-import Carrito from "./pages/Carrito.jsx";
+import Products from "./pages/products.jsx";
+import ProductoDetalle from "./pages/productodetalle.jsx";
+import Carrito from "./pages/carrito.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import PagoExitoso from "./pages/PagoExitoso.jsx";
 import MisOrdenes from "./pages/MisOrdenes.jsx";
 import PerfilCliente from "./pages/perfilcliente.jsx";
 import Directorio from "./pages/Directorio.jsx";
-import VerPerfil from "./pages/VerPerfil.jsx";
-import SolicitarCita from "./pages/SolicitarCita.jsx";
-import CalificarServicio from "./pages/CalificarServicio.jsx";
+import VerPerfil from "./pages/verperfil.jsx";
+import SolicitarCita from "./pages/solicitarcita.jsx";
+import CalificarServicio from "./pages/calificarservicio.jsx";
 import MisCitas from "./pages/miscitas.jsx";
-import MisVehiculos from "./pages/misvehiculos.jsx"; // <-- Import agregado
+import MisVehiculos from "./pages/misvehiculos.jsx";
 import MecanicoDashboard from "./pages/mecanicoDashboard.jsx";
 import CitasMecanico from "./pages/citasmecanico.jsx";
 import Servicios from "./pages/servicios.jsx";
@@ -27,7 +27,7 @@ import TiendaDashboard from "./pages/tiendaDashboard.jsx";
 import CalificacionesProductos from "./pages/calificacionesproductos.jsx";
 import Catalogo from "./pages/catalogo.jsx";
 import MecanicotiendaTienda from "./pages/mecanicotienda.jsx";
-import Admin from "./pages/Admin.jsx";
+import Admin from "./pages/admin.jsx";
 import Ayuda from "./pages/Ayuda.jsx";
 import SolicitarAcceso from "./pages/SolicitarAcceso.jsx";
 
