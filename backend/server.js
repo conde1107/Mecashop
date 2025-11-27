@@ -30,12 +30,29 @@ const pagoRoutes = require('./routes/pago');
 
 
 // ------------------- CORS (ANTES DE TODO) -------------------
+// CORS configurable: permite localhost y el FRONTEND_URL definido en entorno
+const allowedOrigins = [
+  'http://localhost:5173',
+  process.env.FRONTEND_URL || 'https://mecashop-k4pc.vercel.app'
+];
+
 app.use(cors({
-  origin: ["http://localhost:5173", "https://mecashop-k4pc.vercel.app"],
-  methods: "GET,POST,PUT,DELETE",
-  allowedHeaders: "Content-Type,Authorization",
+  origin: function (origin, callback) {
+    // Permitir peticiones desde herramientas (curl, Postman) sin origin
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      return callback(null, true);
+    }
+    // Rechazar otros orígenes
+    return callback(new Error('CORS policy: origin not allowed'), false);
+  },
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: 'Content-Type,Authorization',
   credentials: true
 }));
+
+// Manejar preflight requests explícitamente
+app.options('*', cors());
 
 
 // ------------------- BODY PARSERS -------------------
