@@ -23,14 +23,33 @@ exports.forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    // Configurar transporte de correo con Gmail
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    // Validar variables de entorno necesarias
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('❌ EMAIL_USER o EMAIL_PASS no configurados en variables de entorno');
+      return res.status(500).json({ msg: 'Error del servidor: servicio de correo no configurado.' });
+    }
+
+    if (!process.env.FRONTEND_URL) {
+      console.error('❌ FRONTEND_URL no configurado en variables de entorno');
+      return res.status(500).json({ msg: 'Error del servidor: FRONTEND_URL no configurado.' });
+    }
+
+    // Configurar transporte de correo con Gmail (o SMTP según variables)
+    let transporter;
+    try {
+      transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+      // Verificar configuración del transporte (opcional)
+      await transporter.verify();
+    } catch (err) {
+      console.error('❌ Error configurando transporte de correo:', err);
+      return res.status(500).json({ msg: 'Error configurando servicio de correo.' });
+    }
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -46,15 +65,20 @@ exports.forgotPassword = async (req, res) => {
         <p style="color: #999; font-size: 12px;">Si no solicitaste cambiar tu contraseña, no hagas clic en el enlace.</p>
       </div>
     `;
+    try {
+      await transporter.sendMail({
+        from: `"Soporte Mecashop" <${process.env.EMAIL_USER}>`,
+        to: correo,
+        subject: '🔐 Recuperación de contraseña - Mecashop',
+        html,
+      });
 
-    await transporter.sendMail({
-      from: `"Soporte Mecashop" <${process.env.EMAIL_USER}>`,
-      to: correo,
-      subject: '🔐 Recuperación de contraseña - Mecashop',
-      html,
-    });
-
-    res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
+      res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
+    } catch (err) {
+      console.error('❌ Error enviando correo:', err);
+      // Devolver mensaje con más detalles para facilitar depuración (no exponer secretos)
+      return res.status(500).json({ msg: 'Error enviando el correo. Revisa la configuración del servicio de correo.' });
+    }
   } catch (error) {
     console.error('❌ Error en forgotPassword:', error);
     res.status(500).json({ msg: 'Error enviando el correo.' });
