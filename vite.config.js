@@ -10,11 +10,13 @@ function replaceLocalhostPlugin() {
         const apiBase = process.env.VITE_API_BASE || 'http://localhost:3000/api';
         const apiUrl = apiBase.replace('/api', '');
         
-        // Reemplazar todas las instancias de localhost
+        // Reemplazar todas las instancias de localhost (strings y template literals)
         code = code.replace(/"http:\/\/localhost:3000\/api/g, `"${apiBase}`);
         code = code.replace(/'http:\/\/localhost:3000\/api/g, `'${apiBase}`);
+        code = code.replace(/`http:\/\/localhost:3000\/api/g, `\`${apiBase}`);
         code = code.replace(/"http:\/\/localhost:3000/g, `"${apiUrl}`);
         code = code.replace(/'http:\/\/localhost:3000/g, `'${apiUrl}`);
+        code = code.replace(/`http:\/\/localhost:3000/g, `\`${apiUrl}`);
       }
       return code;
     }
