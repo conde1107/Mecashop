@@ -136,18 +136,32 @@ app.use((err, req, res, next) => {
 });
 
 
-// ------------------- CONEXIÓN A MONGO -------------------
-mongoose.connect(MONGODB_URI)
-  .then(() => {
-    console.log('✅ Conectado a MongoDB');
-    
-    // Iniciar servicios programados (cron jobs)
-    iniciarCronjobs();
-    
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+// ------------------- CONEXIÓN A MONGO (opcional) -------------------
+if (MONGODB_URI) {
+  mongoose.connect(MONGODB_URI)
+    .then(() => {
+      console.log('✅ Conectado a MongoDB');
+
+      // Iniciar servicios programados (cron jobs)
+      iniciarCronjobs();
+
+      app.listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+      });
+    })
+    .catch((error) => {
+      console.error('❌ Error conectando a MongoDB:', error.message);
+      // Si la conexión falla, iniciar el servidor igualmente para evitar que el proceso termine
+      console.warn('⚠️ Iniciando servidor sin conexión a MongoDB (modo degradado)');
+      iniciarCronjobs();
+      app.listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Servidor corriendo (sin MongoDB) en http://localhost:${PORT}`);
+      });
     });
-  })
-  .catch((error) => {
-    console.error('❌ Error conectando a MongoDB:', error.message);
+} else {
+  console.warn('⚠️ MONGODB_URI no configurada. Iniciando servidor sin conexión a MongoDB (modo degradado)');
+  iniciarCronjobs();
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Servidor corriendo (sin MongoDB) en http://localhost:${PORT}`);
   });
+}
