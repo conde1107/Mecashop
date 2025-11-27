@@ -105,7 +105,7 @@ export default function Products() {
         <div className="products-left">
           <h2>MecaShop</h2>
           <h1>Tu motor es nuestra pasión</h1>
-          <p>Encuentra los mejores vehículos eléctricos y más.</p>
+          <p>Encuentra los mejores productos</p>
         </div>
       </section>
 
