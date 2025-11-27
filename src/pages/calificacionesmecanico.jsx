@@ -1,6 +1,6 @@
 //pages/calificacionmecanico.jsx
 import React, { useEffect, useState } from "react";
-import "../styles/CitasMecanico.css";
+import "../styles/citasmecanico.css";
 
 const CalificacionesMecanico = () => {
   const [calificaciones, setCalificaciones] = useState([]);

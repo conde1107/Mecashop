@@ -1,6 +1,6 @@
 //pages/calificarservicio.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/calificarServicio.css";
+import "../styles/calificarservicio.css";
 
 const CalificarServicio = () => {
   const [serviciosPendientes, setServiciosPendientes] = useState([]);
