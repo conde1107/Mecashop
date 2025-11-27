@@ -1,6 +1,6 @@
 //pages/citamecanico.jsx
 import React, { useState, useEffect } from "react";
-import "../styles/CitasMecanico.css";
+import "../styles/citasmecanico.css";
 
 const CitasMecanico = () => {
   const [citas, setCitas] = useState([]);
