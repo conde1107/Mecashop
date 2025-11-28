@@ -26,8 +26,12 @@ const TiendaDashboard = () => {
 
   const buildImgUrl = (img) => {
     if (!img) return null;
+    // Evita que el navegador use caché agregando un query string único
+    const timestamp = new Date().getTime();
     if (img.startsWith("http")) return img;
-    return img.startsWith("/") ? `${API_BASE}${img}` : `${API_BASE}/uploads/${img}`;
+    return img.startsWith("/") 
+      ? `${API_BASE}${img}?t=${timestamp}` 
+      : `${API_BASE}/uploads/${img}?t=${timestamp}`;
   };
 
   // =====================
@@ -48,7 +52,6 @@ const TiendaDashboard = () => {
 
       if (res.ok) {
         const data = await res.json();
-        console.log('Datos cargados del servidor:', data);
         if (data.usuario) {
           setInfoTienda({
             nombre: data.usuario.nombre || 'Mi Tienda',
@@ -89,17 +92,16 @@ const TiendaDashboard = () => {
       if (!res.ok) throw new Error('Error al guardar');
 
       const data = await res.json();
-      console.log('Tienda guardada:', data);
-
       if (data.usuario) {
-        setInfoTienda({
+        setInfoTienda(prev => ({
+          ...prev,
           nombre: data.usuario.nombre || 'Mi Tienda',
           descripcion: data.usuario.descripcion || '',
           telefono: data.usuario.telefono || '',
           email: data.usuario.email || data.usuario.correo || '',
-          imagen: data.usuario.imagen || '',
+          imagen: data.usuario.imagen || prev.imagen,
           ubicacion: data.usuario.zona || ""
-        });
+        }));
       }
 
       setEditandoInfo(false);
@@ -199,7 +201,6 @@ const TiendaDashboard = () => {
     <div className="tienda-dashboard-v2">
       <ToastContainer position="top-right" autoClose={3000} />
 
-      {/* HEADER */}
       <div className="dashboard-header">
         <div className="header-content">
           <h1>Panel de la Tienda</h1>
@@ -207,13 +208,10 @@ const TiendaDashboard = () => {
         </div>
       </div>
 
-      {/* INFORMACIÓN DE TIENDA */}
       <div className="info-tienda-section">
 
         {editandoInfo ? (
           <div className="info-tienda-formulario">
-
-            {/* Imagen */}
             <div className="form-group img-section">
               <label>Imagen de la tienda</label>
 
@@ -226,12 +224,12 @@ const TiendaDashboard = () => {
               )}
 
               <input type="file" accept="image/*" onChange={handleImagenChange} />
-
               <button className="btn-guardar-info" onClick={subirImagen} disabled={subiendo}>
                 {subiendo ? "Subiendo..." : "Subir Imagen"}
               </button>
             </div>
 
+            {/* Resto del formulario */}
             <div className="form-group">
               <label>Nombre de la Tienda</label>
               <input
@@ -292,7 +290,6 @@ const TiendaDashboard = () => {
           </div>
         ) : (
           <div className="info-tienda-display">
-
             <div className="tienda-img-container">
               {infoTienda.imagen ? (
                 <img className="tienda-img" src={buildImgUrl(infoTienda.imagen)} alt="Perfil tienda" />
@@ -332,7 +329,6 @@ const TiendaDashboard = () => {
               <span className="info-label">Email:</span>
               <span className="info-value">{infoTienda.email || 'No especificado'}</span>
             </div>
-
           </div>
         )}
       </div>
