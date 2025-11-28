@@ -1,4 +1,4 @@
-//pages/tiendaDashboard.jsx
+// pages/tiendaDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +13,7 @@ const TiendaDashboard = () => {
     telefono: '',
     email: '',
     imagen: '',
-    ubicacion: "",   // 🆕 AGREGADO
+    ubicacion: "",
   });
 
   const [editandoInfo, setEditandoInfo] = useState(false);
@@ -39,19 +39,16 @@ const TiendaDashboard = () => {
 
   const cargarInfoTienda = async () => {
     if (!tiendaId || !token) return;
-    
+
     try {
       const res = await fetch(`${API_BASE}/api/tienda/${tiendaId}`, {
         method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       if (res.ok) {
         const data = await res.json();
         console.log('Datos cargados del servidor:', data);
-        // Cargar datos del usuario (tienda actual)
         if (data.usuario) {
           setInfoTienda({
             nombre: data.usuario.nombre || 'Mi Tienda',
@@ -65,6 +62,7 @@ const TiendaDashboard = () => {
       }
     } catch (error) {
       console.error('Error al cargar info tienda:', error);
+      toast.error('Error al cargar información de la tienda');
     }
   };
 
@@ -88,14 +86,11 @@ const TiendaDashboard = () => {
         })
       });
 
-      if (!res.ok) {
-        throw new Error('Error al guardar');
-      }
+      if (!res.ok) throw new Error('Error al guardar');
 
       const data = await res.json();
       console.log('Tienda guardada:', data);
-      
-      // Actualizar el estado con los datos del servidor
+
       if (data.usuario) {
         setInfoTienda({
           nombre: data.usuario.nombre || 'Mi Tienda',
@@ -137,8 +132,7 @@ const TiendaDashboard = () => {
   };
 
   const subirImagen = async () => {
-    if (!imagenSeleccionada)
-      return toast.error("Selecciona una imagen primero");
+    if (!imagenSeleccionada) return toast.error("Selecciona una imagen primero");
 
     const formData = new FormData();
     formData.append("foto", imagenSeleccionada);
@@ -149,14 +143,17 @@ const TiendaDashboard = () => {
       const res = await fetch(`${API_BASE}/api/tienda/${tiendaId}/foto`, {
         method: "PUT",
         headers: { Authorization: `Bearer ${token}` },
-        body: formData
+        body: formData,
       });
 
       const data = await res.json();
 
       if (data.imagen) {
-        setInfoTienda((prev) => ({ ...prev, imagen: data.imagen }));
-        localStorage.setItem("infoTienda", JSON.stringify({ ...infoTienda, imagen: data.imagen }));
+        setInfoTienda(prev => {
+          const actualizado = { ...prev, imagen: data.imagen };
+          localStorage.setItem("infoTienda", JSON.stringify(actualizado));
+          return actualizado;
+        });
         toast.success("Imagen actualizada correctamente");
       } else {
         toast.error("No se recibió la imagen actualizada");
@@ -164,6 +161,7 @@ const TiendaDashboard = () => {
 
       setPreviewImagen(null);
       setImagenSeleccionada(null);
+
     } catch (err) {
       console.error("Error al subir imagen:", err);
       toast.error("Error al subir la imagen");
@@ -176,13 +174,11 @@ const TiendaDashboard = () => {
   // Ubicación GPS
   // =====================
   const detectarUbicacion = () => {
-    if (!navigator.geolocation)
-      return toast.error("La geolocalización no está soportada");
+    if (!navigator.geolocation) return toast.error("La geolocalización no está soportada");
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-
         const ubicacionStr = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
 
         setInfoTienda((prev) => ({
@@ -193,8 +189,8 @@ const TiendaDashboard = () => {
         toast.success("Ubicación detectada");
       },
       (err) => {
-        toast.error("No se pudo obtener la ubicación");
         console.error(err);
+        toast.error("No se pudo obtener la ubicación");
       }
     );
   };
@@ -213,11 +209,7 @@ const TiendaDashboard = () => {
 
       {/* INFORMACIÓN DE TIENDA */}
       <div className="info-tienda-section">
-        
 
-        {/* ==============================
-            FORMULARIO DE EDICIÓN
-        =============================== */}
         {editandoInfo ? (
           <div className="info-tienda-formulario">
 
@@ -258,7 +250,6 @@ const TiendaDashboard = () => {
               />
             </div>
 
-            {/* Ubicación */}
             <div className="form-group">
               <label>Ubicación (Coordenadas)</label>
               <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
@@ -300,9 +291,6 @@ const TiendaDashboard = () => {
             </button>
           </div>
         ) : (
-          /* ==============================
-             MODO SOLO VISUALIZACIÓN
-          =============================== */
           <div className="info-tienda-display">
 
             <div className="tienda-img-container">
