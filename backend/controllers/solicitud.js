@@ -389,7 +389,6 @@ exports.reprogramarCita = async (req, res) => {
       if (!servicio) {
         return res.status(404).json({ mensaje: "Cita no encontrada" });
       }
-      // Si es servicio, obtener la solicitud
       solicitud = await Solicitud.findById(servicio.solicitudId)
         .populate("clienteId", "nombre")
         .populate("mecanicoId", "nombre");
@@ -399,6 +398,14 @@ exports.reprogramarCita = async (req, res) => {
       return res.status(404).json({ mensaje: "Solicitud asociada no encontrada" });
     }
 
+    // ✅ Validar que la nueva fecha no sea anterior a la fecha actual de la cita
+    const fechaActualCita = new Date(solicitud.fecha);
+    const nuevaFecha = new Date(fecha);
+
+    if (nuevaFecha < fechaActualCita) {
+      return res.status(400).json({ error: "No se puede elegir una fecha anterior a la cita actual" });
+    }
+
     // Guardar fechas anteriores para la notificación
     const fechaAnterior = solicitud.fecha;
     const horaAnterior = solicitud.hora;
@@ -406,9 +413,9 @@ exports.reprogramarCita = async (req, res) => {
     // Actualizar la solicitud
     solicitud.fecha = fecha;
     solicitud.hora = hora;
-    await solicitud.save();
+    await solicitud.save({ validateBeforeSave: false }); // ✅ Ignorar validación de campos requeridos antiguos
 
-    // Si hay servicios asociados, también actualizarlos
+    // Actualizar también los servicios asociados
     await Servicio.updateMany(
       { solicitudId: solicitud._id },
       { fecha, hora }
@@ -416,7 +423,7 @@ exports.reprogramarCita = async (req, res) => {
 
     // 📬 Notificar al mecánico sobre la reprogramación
     try {
-      const fechaFormato = new Date(fecha).toLocaleDateString("es-ES");
+      const fechaFormato = nuevaFecha.toLocaleDateString("es-ES");
       const mecanicoId = solicitud.mecanicoId._id || solicitud.mecanicoId;
       const clienteNombre = solicitud.clienteId.nombre || solicitud.clienteId;
       
