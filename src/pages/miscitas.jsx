@@ -24,7 +24,6 @@ const MisCitas = () => {
       });
       if (!res.ok) throw new Error(`Error: ${res.status}`);
       const data = await res.json();
-      // Solo mostrar servicios pendientes (no solicitudes)
       const citasPendientes = Array.isArray(data)
         ? data.filter(c => c.estado === "pendiente" && c.nombreServicio)
         : [];
@@ -72,6 +71,13 @@ const MisCitas = () => {
 
   const reprogramarCita = async () => {
     if (!selectedCita) return;
+
+    // Validar que la nueva fecha no sea anterior a la fecha original
+    if (new Date(nuevaFecha) < new Date(selectedCita.fecha)) {
+      toast.error("No se puede reprogramar a una fecha anterior a la original");
+      return;
+    }
+
     try {
       console.log('[reprogramarCita] Reprogramando cita con ID:', selectedCita._id);
       const res = await fetch(`${API_BASE}/solicitudes/${selectedCita._id}/reprogramar`, {
@@ -123,9 +129,9 @@ const MisCitas = () => {
               <div className="cita-header">
                 <h3>Cita con {cita.mecanicoId?.nombre || "Mecánico"}</h3>
                 <span className={`cita-estado ${cita.estado}`}>
-                  {cita.estado === "pendiente" && "⏳ Pendiente"}
-                  {cita.estado === "aceptada" && "✅ Aceptada"}
-                  {cita.estado === "cancelada" && "❌ Cancelada"}
+                  {cita.estado === "pendiente" && " Pendiente"}
+                  {cita.estado === "aceptada" && " Aceptada"}
+                  {cita.estado === "cancelada" && " Cancelada"}
                 </span>
               </div>
 
@@ -164,7 +170,12 @@ const MisCitas = () => {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h4>Reprogramar cita con {selectedCita.mecanicoId?.nombre}</h4>
             <label>Fecha:</label>
-            <input type="date" value={nuevaFecha} onChange={(e) => setNuevaFecha(e.target.value)} />
+            <input
+              type="date"
+              value={nuevaFecha}
+              onChange={(e) => setNuevaFecha(e.target.value)}
+              min={selectedCita.fecha ? selectedCita.fecha.split("T")[0] : new Date().toISOString().split("T")[0]} 
+            />
             <label>Hora:</label>
             <input type="time" value={nuevaHora} onChange={(e) => setNuevaHora(e.target.value)} />
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
