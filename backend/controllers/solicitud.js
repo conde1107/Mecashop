@@ -325,18 +325,17 @@ exports.obtenerSolicitudPorId = async (req, res) => {
 exports.cancelarCita = async (req, res) => {
   try {
     const citaId = req.params.id;
-    
-    // Primero intentar como solicitud
+
+    // Buscar como solicitud
     let solicitud = await Solicitud.findById(citaId);
     let esServicio = false;
-    
-    // Si no es solicitud, podría ser un servicio
+
+    // Si no existe la solicitud, puede ser ID de servicio
     if (!solicitud) {
       const servicio = await Servicio.findById(citaId);
       if (!servicio) {
         return res.status(404).json({ mensaje: "Cita no encontrada" });
       }
-      // Si es servicio, obtener la solicitud
       solicitud = await Solicitud.findById(servicio.solicitudId);
       esServicio = true;
     }
@@ -345,24 +344,34 @@ exports.cancelarCita = async (req, res) => {
       return res.status(404).json({ mensaje: "Solicitud asociada no encontrada" });
     }
 
-    solicitud.estado = "cancelada";
-    await solicitud.save();
+    // ================================
+    // ✅ Actualizar sin validar campos requeridos
+    // ================================
+    const solicitudActualizada = await Solicitud.findByIdAndUpdate(
+      solicitud._id,
+      { estado: "cancelada" },
+      { new: true, runValidators: false } // ← SOLUCIÓN
+    );
 
-    // Si hay servicios asociados, también marcarlos como cancelados
+    // ================================
+    // Cancelar todos los servicios asociados
+    // ================================
     await Servicio.updateMany(
       { solicitudId: solicitud._id },
       { estado: "cancelado" }
     );
 
-    res.json({ 
+    return res.json({
       mensaje: "Cita cancelada correctamente",
-      solicitud 
+      solicitud: solicitudActualizada
     });
+
   } catch (error) {
     console.error("❌ Error cancelarCita:", error);
-    res.status(500).json({ mensaje: "Error al cancelar cita", error: error.message });
+    return res.status(500).json({ mensaje: "Error al cancelar cita", error: error.message });
   }
 };
+
 
 // =====================================================================
 // ✅ Reprogramar cita (cliente)
