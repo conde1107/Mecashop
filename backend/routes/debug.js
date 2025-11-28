@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middleware/auth');
 const nodemailer = require('nodemailer');
+let sendgrid;
+try {
+  sendgrid = require('@sendgrid/mail');
+} catch (e) {
+  sendgrid = null;
+}
 
 // Route to inspect decoded token and headers for debugging
 router.get('/whoami', verifyToken, (req, res) => {
@@ -65,6 +71,24 @@ router.post('/test-smtp', async (req, res) => {
     const emailHost = process.env.EMAIL_HOST;
     const emailPort = process.env.EMAIL_PORT;
     const emailSecure = process.env.EMAIL_SECURE === 'true';
+
+    // Prefer SendGrid API if API key is present
+    if (process.env.SENDGRID_API_KEY && sendgrid) {
+      sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+      const testTo = process.env.DEBUG_SMTP_TEST_TO || process.env.EMAIL_USER;
+      try {
+        await sendgrid.send({
+          to: testTo,
+          from: process.env.EMAIL_USER,
+          subject: 'Prueba SMTP (SendGrid)',
+          html: '<p>Prueba de envío desde /api/debug/test-smtp</p>'
+        });
+        return res.json({ ok: true, mensaje: 'Conexión SendGrid verificada (correo enviado).' });
+      } catch (err) {
+        console.error('[debug/test-smtp] Error enviando con SendGrid:', err && err.message ? err.message : err);
+        return res.status(500).json({ ok: false, mensaje: 'Error verificando SendGrid', detalle: err && err.message ? err.message : 'sin detalle' });
+      }
+    }
 
     let transporter;
     if (emailHost && emailPort) {

@@ -1,4 +1,5 @@
 const Solicitud = require("../models/solicitud");
+const mongoose = require("mongoose");
 const Servicio = require("../models/servicio");
 const { crearNotificacion } = require("../utils/notificacionUtils");
 
@@ -93,31 +94,63 @@ exports.obtenerSolicitudes = async (req, res) => {
 // =====================================================================
 exports.aceptarCita = async (req, res) => {
   try {
-    const solicitud = await Solicitud.findById(req.params.id)
+    // Sanitizar/validar el id en params para evitar errores de cast
+    const rawId = req.params.id;
+    const id = String(rawId).replace(/[<>\s]/g, '');
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ mensaje: "ID de solicitud inválido", error: "invalid_id" });
+    }
+
+    // Si la conexión a MongoDB no está establecida, fallamos rápido con 503
+    if (mongoose.connection.readyState !== 1) {
+      console.error(`❌ aceptarCita: base de datos no conectada (readyState=${mongoose.connection.readyState})`);
+      return res.status(503).json({ mensaje: "Servicio temporalmente no disponible - base de datos desconectada", error: "db_disconnected" });
+    }
+
+    const solicitud = await Solicitud.findById(id)
       .populate("clienteId", "nombre")
       .populate("mecanicoId", "nombre");
     if (!solicitud) return res.status(404).json({ mensaje: "Solicitud no encontrada" });
 
     solicitud.estado = "aceptada";
-    await solicitud.save();
+    if (!solicitud.vehiculoId) {
+      console.warn(`⚠️ aceptarCita: solicitud ${solicitud._id} no tiene vehiculoId. Saltando validación al guardar.`);
+    }
+    // Evitar que una validación de esquema previa (p.ej. campos requeridos faltantes)
+    // bloquee la operación de aceptación. Usamos validateBeforeSave: false
+    // para no forzar la presencia de campos antiguos incompletos.
+    await solicitud.save({ validateBeforeSave: false });
 
     // Crear un "Servicio" individual por cada servicio solicitado
     const serviciosCreados = [];
-    for (const s of solicitud.servicios) {
-      const nuevoServicio = new Servicio({
-        solicitudId: solicitud._id,
-        clienteId: solicitud.clienteId,
-        mecanicoId: solicitud.mecanicoId,
-        nombreServicio: s.nombreServicio,
-        descripcion: solicitud.descripcion || "",
-        estado: "pendiente",
-        fecha: solicitud.fecha,
-        hora: solicitud.hora,
-        precio: s.precio,
-      });
+    const erroresCreacion = [];
 
-      await nuevoServicio.save();
-      serviciosCreados.push(nuevoServicio);
+    // Normalizar y validar items de servicios por si vienen con datos incompletos
+    const serviciosParaCrear = (Array.isArray(solicitud.servicios) ? solicitud.servicios : []).map(item => ({
+      nombreServicio: (item && (item.nombreServicio || item.nombre)) ? (item.nombreServicio || item.nombre) : 'Servicio',
+      precio: (item && typeof item.precio === 'number') ? item.precio : (item && item.precio ? Number(item.precio) : 0)
+    }));
+
+    for (const s of serviciosParaCrear) {
+      try {
+        const nuevoServicio = new Servicio({
+          solicitudId: solicitud._id,
+          clienteId: (solicitud.clienteId && solicitud.clienteId._id) ? solicitud.clienteId._id : solicitud.clienteId,
+          mecanicoId: (solicitud.mecanicoId && solicitud.mecanicoId._id) ? solicitud.mecanicoId._id : solicitud.mecanicoId,
+          nombreServicio: s.nombreServicio,
+          descripcion: solicitud.descripcion || "",
+          estado: "pendiente",
+          fecha: solicitud.fecha,
+          hora: solicitud.hora,
+          precio: typeof s.precio === 'number' ? s.precio : 0,
+        });
+
+        await nuevoServicio.save();
+        serviciosCreados.push(nuevoServicio);
+      } catch (e) {
+        console.error('❌ Error creando servicio para solicitud', solicitud._id, e && e.message ? e.message : e);
+        erroresCreacion.push({ servicio: s, error: e && e.message ? e.message : String(e) });
+      }
     }
 
     // 📬 Notificar al cliente que su cita fue aceptada
@@ -147,6 +180,7 @@ exports.aceptarCita = async (req, res) => {
       mensaje: "Cita aceptada y servicios creados correctamente",
       solicitud,
       servicios: serviciosCreados,
+      erroresCreacion: erroresCreacion.length ? erroresCreacion : undefined
     });
   } catch (error) {
     console.error("🔥 ERROR aceptarCita:", error);
@@ -162,21 +196,24 @@ exports.rechazarCita = async (req, res) => {
     const solicitud = await Solicitud.findById(req.params.id)
       .populate("clienteId", "nombre")
       .populate("mecanicoId", "nombre");
-    if (!solicitud) return res.status(404).json({ mensaje: "Solicitud no encontrada" });
 
+    if (!solicitud) {
+      return res.status(404).json({ mensaje: "Solicitud no encontrada" });
+    }
+
+    // Cambiar estado a 'rechazada'
     solicitud.estado = "rechazada";
-    await solicitud.save();
 
-    // 📬 Notificar al cliente que su cita fue rechazada
+    // Guardar sin validar campos requeridos como vehiculoId
+    await solicitud.save({ validateBeforeSave: false });
+
+    // Notificar al cliente
     try {
       const clienteId = solicitud.clienteId._id || solicitud.clienteId;
       const mecanicoNombre = solicitud.mecanicoId.nombre || solicitud.mecanicoId;
-      
-      console.log('🔍 Debug rechazar cita:', {
-        clienteId,
-        mecanicoNombre
-      });
-      
+
+      console.log('🔍 Debug rechazar cita:', { clienteId, mecanicoNombre });
+
       await crearNotificacion(
         clienteId,
         "❌ Cita Rechazada",
@@ -184,6 +221,7 @@ exports.rechazarCita = async (req, res) => {
         "cita",
         solicitud._id
       );
+
       console.log('✅ Notificación de rechazo enviada');
     } catch (err) {
       console.error("❌ Error al notificar rechazo de cita:", err);

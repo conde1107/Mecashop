@@ -2,6 +2,13 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+let sendgrid;
+try {
+  sendgrid = require('@sendgrid/mail');
+} catch (e) {
+  // optional dependency
+  sendgrid = null;
+}
 const Usuario = require('../models/usuario');
 
 // 📌 Enviar correo de recuperación
@@ -23,7 +30,40 @@ exports.forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
-    // Configurar transporte de correo.
+    // Prefer SendGrid API if API key is provided (more reliable on PaaS like Render)
+    const sendgridApiKey = process.env.SENDGRID_API_KEY;
+    if (sendgridApiKey && sendgrid) {
+      sendgrid.setApiKey(sendgridApiKey);
+      const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Recuperación de contraseña</h2>
+        <p>Hola <b>${usuario.nombre}</b>,</p>
+        <p>Recibimos una solicitud para restablecer tu contraseña. Si no fuiste tú, ignora este mensaje.</p>
+        <p>Haz clic en el enlace para restablecer tu contraseña:</p>
+        <a href="${resetUrl}" 
+          style="display: inline-block; background: #7c3aed; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; margin: 20px 0;">
+          Restablecer contraseña
+        </a>
+        <p style="color: #666; font-size: 14px;">Este enlace es válido solo por 10 minutos.</p>
+        <p style="color: #999; font-size: 12px;">Si no solicitaste cambiar tu contraseña, no hagas clic en el enlace.</p>
+      </div>
+    `;
+
+      try {
+        await sendgrid.send({
+          to: correo,
+          from: process.env.EMAIL_USER,
+          subject: '🔐 Recuperación de contraseña - Mecashop',
+          html,
+        });
+        return res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
+      } catch (sgErr) {
+        console.error('❌ Error enviando correo con SendGrid:', sgErr && sgErr.message ? sgErr.message : sgErr);
+        return res.status(500).json({ msg: 'Error enviando el correo (SendGrid).' });
+      }
+    }
+
+    // Configurar transporte de correo mediante SMTP.
     // Si se definen EMAIL_HOST/EMAIL_PORT/EMAIL_SECURE en el entorno, úsalos (por ejemplo SendGrid SMTP).
     // Si no, caeremos en el servicio 'gmail' para compatibilidad con la configuración anterior.
     const emailUser = process.env.EMAIL_USER;
