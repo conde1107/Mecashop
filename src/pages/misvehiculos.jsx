@@ -430,26 +430,30 @@ export default function MisVehiculos() {
             </div>
           </div>
 
-          <div className="form-inputs">
-            <div className="input-group">
-              <input
-                type="date"
-                placeholder="Fecha Compra SOAT"
-                value={nuevoVehiculo.fechaCompraSoat}
-                onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraSoat: e.target.value })}
-                title="Fecha Compra SOAT"
-              />
-            </div>
-            <div className="input-group">
-              <input
-                type="date"
-                placeholder="Fecha Compra Técnico-Mecánica"
-                value={nuevoVehiculo.fechaCompraTeconomecanica}
-                onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraTeconomecanica: e.target.value })}
-                title="Fecha Compra Técnico-Mecánica"
-              />
-            </div>
-          </div>
+      <div className="form-inputs">
+  {/* Otros campos ... */}
+
+  <div className="input-group">
+    <label htmlFor="fechaCompraSoat">Fecha Compra SOAT</label>
+    <input
+      type="date"
+      id="fechaCompraSoat"
+      value={nuevoVehiculo.fechaCompraSoat}
+      onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraSoat: e.target.value })}
+    />
+  </div>
+
+  <div className="input-group">
+    <label htmlFor="fechaCompraTeconomecanica">Fecha Compra Técnico-Mecánica</label>
+    <input
+      type="date"
+      id="fechaCompraTeconomecanica"
+      value={nuevoVehiculo.fechaCompraTeconomecanica}
+      onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraTeconomecanica: e.target.value })}
+    />
+  </div>
+</div>
+
 
           <div className="form-actions">
             <div className="cargar-imagen-section">
