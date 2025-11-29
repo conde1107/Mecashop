@@ -142,7 +142,7 @@ const MecanicoDashboard = () => {
   // ===========================
   // Imagen de perfil
   // ===========================
-    const handleImagenChange = (e) => {
+const handleImagenChange = (e) => {
   const file = e.target.files[0];
   if (!file) {
     console.log("No se seleccionó ningún archivo");
@@ -153,8 +153,11 @@ const MecanicoDashboard = () => {
   console.log("Tipo:", file.type);
   console.log("Tamaño:", file.size);
 
-  if (!file.type.startsWith("image/")) return alert("Selecciona un archivo de imagen");
-  if (file.size > 5 * 1024 * 1024) return alert("La imagen debe ser menor a 5MB");
+  if (!file.type.startsWith("image/"))
+    return alert("Selecciona un archivo de imagen");
+
+  if (file.size > 5 * 1024 * 1024)
+    return alert("La imagen debe ser menor a 5MB");
 
   setImagenSeleccionada(file);
   setPreviewImagen(URL.createObjectURL(file));
@@ -166,26 +169,36 @@ const subirImagen = async () => {
   const formData = new FormData();
   formData.append("foto", imagenSeleccionada);
 
-  // Depuración: verificar que el FormData tenga la imagen
+  // Debug
   for (let pair of formData.entries()) {
     console.log("FormData key:", pair[0], "value:", pair[1]);
   }
 
   try {
     setSubiendoImagen(true);
-    const data = await apiFetch(`${API_BASE}/api/mecanicos/${mecanicoId}/foto`, {
+
+    const res = await fetch(`${API_BASE}/api/mecanicos/${mecanicoId}/foto`, {
       method: "PUT",
-      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`, // si usas token de autenticación
+      },
+      body: formData, // 👈 IMPORTANTE: sin JSON, sin Content-Type manual
     });
 
-    setPerfil((prev) => ({ ...prev, imagen: data.imagen || prev.imagen }));
-    setImagenSeleccionada(null);
-    if (previewImagen) URL.revokeObjectURL(previewImagen);
-    setPreviewImagen(null);
-    alert("✅ Imagen actualizada correctamente");
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("✅ Imagen actualizada correctamente");
+      setPerfil((prev) => ({ ...prev, imagen: data.imagen || prev.imagen }));
+      setImagenSeleccionada(null);
+      if (previewImagen) URL.revokeObjectURL(previewImagen);
+      setPreviewImagen(null);
+    } else {
+      alert(data.message || "❌ No se pudo subir la imagen");
+    }
   } catch (error) {
     console.error("Error al subir imagen:", error);
-    alert("❌ No se pudo subir la imagen");
+    alert("❌ Error de conexión");
   } finally {
     setSubiendoImagen(false);
   }
