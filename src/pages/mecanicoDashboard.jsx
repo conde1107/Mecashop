@@ -142,9 +142,10 @@ const MecanicoDashboard = () => {
   // ===========================
   // Imagen de perfil
   // ===========================
-  const handleImagenChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+         const file = e.target.files[0];
+            if (!file) return;
+            console.log("Archivo seleccionado:", file);
+
     if (!file.type.startsWith("image/")) return alert("Selecciona un archivo de imagen");
     if (file.size > 5 * 1024 * 1024) return alert("La imagen debe ser menor a 5MB");
 
@@ -152,11 +153,11 @@ const MecanicoDashboard = () => {
 
     setImagenSeleccionada(file);
     setPreviewImagen(URL.createObjectURL(file));
-    
+
     console.log("Archivo seleccionado:", imagenSeleccionada);
 console.log("Tipo:", imagenSeleccionada.type);
 console.log("Tamaño:", imagenSeleccionada.size);
-  };
+  
 
   const subirImagen = async () => {
     if (!imagenSeleccionada) return alert("Selecciona una imagen primero");
@@ -492,5 +493,6 @@ console.log("Tamaño:", imagenSeleccionada.size);
     </div>
   );
 };
+
 
 export default MecanicoDashboard;
