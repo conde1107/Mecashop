@@ -5,7 +5,7 @@ const Servicio = require('../models/servicio');
 const cloudinary = require('../config/Cloudinary'); // asegúrate que la ruta esté correcta
 
 // ==========================
-// OBTENER MECÁNICOS
+// OBTENER MECÁNICOS  
 // ==========================
 exports.obtenerMecanicos = async (req, res) => {
   try {
