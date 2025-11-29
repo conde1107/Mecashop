@@ -1,3 +1,13 @@
+/* Badge gris para roles */
+.badge {
+  color: #fff;
+  background: #888;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-size: 0.95em;
+  font-weight: 500;
+  display: inline-block;
+}
 /* ========================================
    ADMIN PANEL - ESTILOS MODERNOS
 ======================================== */
