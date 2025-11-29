@@ -41,27 +41,26 @@ exports.actualizarFotoPerfil = async (req, res) => {
   try {
     const mecanicoId = req.params.id;
 
-    if (!req.file) return res.status(400).json({ mensaje: "No se subió ninguna foto" });
+    if (!req.file) {
+      return res.status(400).json({ mensaje: "No se subió ninguna foto" });
+    }
 
-    // Subir a Cloudinary usando buffer
-    const uploadResult = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: "mecanicos" },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      stream.end(req.file.buffer);
+    // Subir imagen a Cloudinary usando path
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "mecanicos",                  // carpeta en Cloudinary
+      public_id: `${mecanicoId}_perfil`,    // nombre único
+      overwrite: true,
     });
 
     const mecanico = await Usuario.findByIdAndUpdate(
       mecanicoId,
-      { imagen: uploadResult.secure_url },
+      { imagen: result.secure_url },
       { new: true }
     );
 
-    if (!mecanico) return res.status(404).json({ mensaje: "Mecánico no encontrado" });
+    if (!mecanico) {
+      return res.status(404).json({ mensaje: "Mecánico no encontrado" });
+    }
 
     res.status(200).json({ mensaje: "Foto actualizada", imagen: mecanico.imagen });
   } catch (error) {
@@ -69,6 +68,7 @@ exports.actualizarFotoPerfil = async (req, res) => {
     res.status(500).json({ mensaje: "Error al actualizar la foto", error: error.message });
   }
 };
+
 
 // ==========================
 // ACTUALIZAR DISPONIBILIDAD
