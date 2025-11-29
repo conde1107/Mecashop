@@ -125,10 +125,12 @@ const ProductoDetalle = () => {
     <div className="detalle-container">
       <div className="detalle-card">
         <img
-          src={`http://localhost:3000${producto.imagenURL}`}
-          alt={producto.nombre}
-          className="detalle-imagen"
-        />
+  src={producto.imagenURL || '/img/default-product.png'}
+  alt={producto.nombre}
+  className="detalle-imagen"
+  onError={(e) => { e.target.src = '/img/default-product.png'; }}
+/>
+
         <div className="detalle-info">
           <h2>{producto.nombre}</h2>
           <p>{producto.descripcion}</p>
