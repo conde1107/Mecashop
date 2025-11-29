@@ -160,6 +160,9 @@ const MecanicoDashboard = () => {
   setPreviewImagen(URL.createObjectURL(file));
 };
 
+for (let pair of formData.entries()) {
+  console.log("FormData key:", pair[0], "value:", pair[1]);
+}
 
 
   
