@@ -12,9 +12,10 @@ const API_BASE = "http://localhost:3000";
 
 const buildImgUrl = (img) => {
   if (!img) return null;
-  if (img.startsWith("http")) return img;
-  return img.startsWith("/") ? `${API_BASE}${img}` : `${API_BASE}/uploads/${img}`;
+  // Si ya es una URL completa (Cloudinary u otra), usarla tal cual
+  return img.startsWith("http") ? img : `${API_BASE}${img}`;
 };
+
 
 export default function MisVehiculos() {
   const location = useLocation();
@@ -496,12 +497,17 @@ export default function MisVehiculos() {
           {vehiculos.map((v) => (
             <div key={v._id} data-vehiculo-id={v._id} className={`vehiculo-card-new ${activeVehicle === v._id ? 'activo' : ''}`}>
               <div className="vehiculo-image-container">
-                {buildImgUrl(v.imagen) ? (
-                  <img className="vehiculo-img-new" src={buildImgUrl(v.imagen)} alt={`${v.marca} ${v.modelo}`} />
-                ) : (
-                  <div className="vehiculo-img-placeholder">V</div>
-                )}
-              </div>
+                  {v.imagen ? (
+                   <img
+                className="vehiculo-img-new"
+                    src={v.imagen}
+                alt={`${v.marca} ${v.modelo}`}
+                      />
+                      ) : (
+                       <div className="vehiculo-img-placeholder">V</div>
+                           )}
+                           </div>
+
               
               <div className="vehiculo-placa-badge">
                 <span className="placa-numero">{v.placa}</span>

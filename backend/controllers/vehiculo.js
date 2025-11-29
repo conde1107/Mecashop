@@ -1,8 +1,12 @@
+// controllers/vehiculo.js
 const Vehiculo = require("../models/vehiculo");
 const fs = require("fs");
 const path = require("path");
+const cloudinary = require("../config/Cloudinary"); // Cloudinary configurado
 
-// 📌 Listar vehículos del usuario autenticado
+// =====================
+// Listar vehículos del usuario
+// =====================
 exports.obtenerVehiculos = async (req, res) => {
   try {
     if (!req.userId) return res.status(401).json({ error: "Usuario no autenticado" });
@@ -15,55 +19,52 @@ exports.obtenerVehiculos = async (req, res) => {
   }
 };
 
-// 📌 Agregar un nuevo vehículo
+// =====================
+// Agregar un nuevo vehículo
+// =====================
 exports.agregarVehiculo = async (req, res) => {
   try {
-    const { marca, modelo, kilometraje, placa, tipo, color, combustible, tipoUso, tipoAceite, usoEspecial, fechaCompraSoat, fechaCompraTeconomecanica } = req.body;
+    const {
+      marca, modelo, kilometraje, placa, tipo, color,
+      combustible, tipoUso, tipoAceite, usoEspecial,
+      fechaCompraSoat, fechaCompraTeconomecanica
+    } = req.body;
 
-    // Limpiar espacios en blanco
-    const marcaLimpia = marca ? marca.trim() : "";
-    const modeloLimpia = modelo ? modelo.trim() : "";
-    const placaLimpia = placa ? placa.trim() : "";
-    const colorLimpia = color ? color.trim() : "";
-
-    if (!marcaLimpia || !modeloLimpia || !placaLimpia) {
+    // Validaciones básicas
+    if (!marca?.trim() || !modelo?.trim() || !placa?.trim()) {
       return res.status(400).json({ error: "Marca, modelo y placa son obligatorios" });
     }
-
     if (!req.userId) return res.status(401).json({ error: "Usuario no autenticado" });
 
-    const imagen = req.file ? `/uploads/${req.file.filename}` : null;
+    let imagenUrl = null;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "vehiculos",
+        public_id: `${req.userId}_${Date.now()}_vehiculo`,
+        overwrite: true,
+      });
+      imagenUrl = result.secure_url;
+      fs.unlinkSync(req.file.path);
+    }
 
     const nuevoVehiculo = new Vehiculo({
       usuario: req.userId,
-      marca: marcaLimpia,
-      modelo: modeloLimpia,
+      marca: marca.trim(),
+      modelo: modelo.trim(),
       kilometraje: parseInt(kilometraje) || 0,
-      placa: placaLimpia,
+      placa: placa.trim(),
       tipo: tipo || "Carro",
-      color: colorLimpia || "", // Siempre guardar, aunque sea vacío
-      combustible: combustible || "Gasolina", // Siempre guardar con valor por defecto
+      color: color?.trim() || "",
+      combustible: combustible || "Gasolina",
       tipoUso: tipoUso || "diario",
       tipoAceite: tipoAceite || "sintético",
       usoEspecial: usoEspecial || "normal",
-      imagen,
-      fechaCompraSoat: fechaCompraSoat && fechaCompraSoat.trim() !== "" ? new Date(fechaCompraSoat) : null,
-      fechaCompraTeconomecanica: fechaCompraTeconomecanica && fechaCompraTeconomecanica.trim() !== "" ? new Date(fechaCompraTeconomecanica) : null,
-    });
-
-    console.log('📝 Guardando vehículo con datos:', {
-      marca: marcaLimpia,
-      modelo: modeloLimpia,
-      placa: placaLimpia,
-      color: colorLimpia,
-      combustible,
-      tipoUso,
-      tipoAceite,
-      usoEspecial
+      imagen: imagenUrl,
+      fechaCompraSoat: fechaCompraSoat?.trim() ? new Date(fechaCompraSoat) : null,
+      fechaCompraTeconomecanica: fechaCompraTeconomecanica?.trim() ? new Date(fechaCompraTeconomecanica) : null,
     });
 
     await nuevoVehiculo.save();
-    console.log('✅ Vehículo guardado exitosamente:', nuevoVehiculo._id);
     res.json({ msg: "Vehículo agregado correctamente", vehiculo: nuevoVehiculo });
   } catch (error) {
     console.error("Error al agregar vehículo:", error);
@@ -71,22 +72,24 @@ exports.agregarVehiculo = async (req, res) => {
   }
 };
 
-// 📌 Eliminar un vehículo del usuario autenticado
+// =====================
+// Eliminar un vehículo
+// =====================
 exports.eliminarVehiculo = async (req, res) => {
   try {
     const { id } = req.params;
     if (!req.userId) return res.status(401).json({ error: "Usuario no autenticado" });
 
     const vehiculo = await Vehiculo.findOne({ _id: id, usuario: req.userId });
-    if (!vehiculo) {
-      return res.status(404).json({ error: "Vehículo no encontrado o no autorizado" });
-    }
+    if (!vehiculo) return res.status(404).json({ error: "Vehículo no encontrado o no autorizado" });
 
-    // 🧹 Eliminar imagen del servidor si existe
+    // Eliminar imagen de Cloudinary si existe
     if (vehiculo.imagen) {
-      const rutaImagen = path.join(__dirname, "..", vehiculo.imagen.replace(/^\/+/, ""));
-      if (fs.existsSync(rutaImagen)) {
-        fs.unlinkSync(rutaImagen);
+      try {
+        const publicId = vehiculo.imagen.split("/").pop().split(".")[0]; // Extrae nombre del archivo
+        await cloudinary.uploader.destroy(`vehiculos/${publicId}`);
+      } catch (err) {
+        console.error("Error eliminando imagen en Cloudinary:", err);
       }
     }
 
@@ -98,13 +101,14 @@ exports.eliminarVehiculo = async (req, res) => {
   }
 };
 
-// Actualizar kilometraje (nuevo endpoint)
+// =====================
+// Actualizar kilometraje y datos opcionales
+// =====================
 exports.actualizarKilometraje = async (req, res) => {
   try {
     const { id } = req.params;
     const { nuevoKilometraje, combustible, tipoAceite, color, usoEspecial } = req.body;
 
-    // Verificar que al menos un campo esté siendo actualizado
     if (!nuevoKilometraje && !combustible && !tipoAceite && !color && !usoEspecial) {
       return res.status(400).json({ error: 'Actualiza al menos un campo' });
     }
@@ -113,7 +117,6 @@ exports.actualizarKilometraje = async (req, res) => {
     if (!vehiculo) return res.status(404).json({ error: 'Vehículo no encontrado' });
     if (vehiculo.usuario._id.toString() !== req.userId) return res.status(403).json({ error: 'No autorizado' });
 
-    // Si hay km, validar que sea válido y mayor al actual
     if (nuevoKilometraje) {
       const nuevo = parseInt(nuevoKilometraje, 10);
       if (isNaN(nuevo) || nuevo < 0) return res.status(400).json({ error: 'Kilometraje inválido' });
@@ -122,8 +125,6 @@ exports.actualizarKilometraje = async (req, res) => {
       }
       vehiculo.kilometraje = nuevo;
     }
-
-    // Actualizar campos opcionales
     if (combustible) vehiculo.combustible = combustible;
     if (tipoAceite) vehiculo.tipoAceite = tipoAceite;
     if (color) vehiculo.color = color;
@@ -131,34 +132,17 @@ exports.actualizarKilometraje = async (req, res) => {
 
     const vehiculoActualizado = await vehiculo.save();
 
-    console.log('📝 Vehículo actualizado:', {
-      placa: vehiculo.placa,
-      kilometraje: vehiculo.kilometraje,
-      combustible: vehiculo.combustible,
-      tipoAceite: vehiculo.tipoAceite,
-      color: vehiculo.color,
-      usoEspecial: vehiculo.usoEspecial
-    });
-
-    // 🔔 Generar notificaciones solo si el km cambió
+    // Generar notificaciones si cambió el km
     if (nuevoKilometraje) {
       try {
         const { obtenerRecomendacionesPendientes, crearNotificacionMantenimiento } = require('../utils/mantenimientoUtils');
-        
-        // IMPORTANTE: Buscar de nuevo para asegurar que tenemos el documento actual
         const vehiculoParaVerificar = await Vehiculo.findById(id).populate('usuario');
-        
-        console.log('🔍 Verificando recomendaciones para:', vehiculoParaVerificar.placa, 'km:', vehiculoParaVerificar.kilometraje);
         const recomendaciones = obtenerRecomendacionesPendientes(vehiculoParaVerificar);
-        console.log('✅ Recomendaciones encontradas:', recomendaciones.length);
-
         for (const recomendacion of recomendaciones) {
-          console.log('📧 Creando notificación para:', recomendacion.tipo);
           await crearNotificacionMantenimiento(vehiculoParaVerificar.usuario._id, recomendacion, vehiculoParaVerificar);
         }
       } catch (err) {
-        console.error('Error generando notificaciones de mantenimiento:', err.message);
-        console.error(err.stack);
+        console.error('Error generando notificaciones de mantenimiento:', err);
       }
     }
 
@@ -169,7 +153,9 @@ exports.actualizarKilometraje = async (req, res) => {
   }
 };
 
-// 📌 Actualizar información general del vehículo
+// =====================
+// Actualizar información general
+// =====================
 exports.actualizarVehiculo = async (req, res) => {
   try {
     const { id } = req.params;
@@ -180,10 +166,10 @@ exports.actualizarVehiculo = async (req, res) => {
     if (vehiculo.usuario.toString() !== req.userId) return res.status(403).json({ error: 'No autorizado' });
 
     if (fechaCompraSoat !== undefined) {
-      vehiculo.fechaCompraSoat = fechaCompraSoat && fechaCompraSoat.trim() !== "" ? new Date(fechaCompraSoat) : null;
+      vehiculo.fechaCompraSoat = fechaCompraSoat?.trim() ? new Date(fechaCompraSoat) : null;
     }
     if (fechaCompraTeconomecanica !== undefined) {
-      vehiculo.fechaCompraTeconomecanica = fechaCompraTeconomecanica && fechaCompraTeconomecanica.trim() !== "" ? new Date(fechaCompraTeconomecanica) : null;
+      vehiculo.fechaCompraTeconomecanica = fechaCompraTeconomecanica?.trim() ? new Date(fechaCompraTeconomecanica) : null;
     }
 
     await vehiculo.save();
@@ -193,27 +179,44 @@ exports.actualizarVehiculo = async (req, res) => {
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
-// 📄 Subir documentos (SOAT y Tecnomecánica)
+
+// =====================
+// Subir documentos (SOAT y Tecnomecánica) a Cloudinary
+// =====================
 exports.subirDocumentos = async (req, res) => {
   try {
     const { id } = req.params;
     const vehiculo = await Vehiculo.findById(id);
     if (!vehiculo) return res.status(404).json({ error: "Vehículo no encontrado" });
-
     if (vehiculo.usuario.toString() !== req.userId)
       return res.status(403).json({ error: "No autorizado" });
 
-    // Si no se enviaron archivos
-    if (!req.files || ( !req.files.soat && !req.files.tecnomecanica )) {
+    if (!req.files || (!req.files.soat && !req.files.tecnomecanica)) {
       return res.status(400).json({ error: "Debes subir al menos un documento" });
     }
 
-    // Guardar rutas de archivos
+    // Subir SOAT
     if (req.files.soat) {
-      vehiculo.soat = `/uploads/${req.files.soat[0].filename}`;
+      const soatPath = req.files.soat[0].path;
+      const result = await cloudinary.uploader.upload(soatPath, {
+        folder: "vehiculos/documentos",
+        public_id: `${req.userId}_${vehiculo._id}_soat`,
+        overwrite: true,
+      });
+      vehiculo.soat = result.secure_url;
+      fs.unlinkSync(soatPath);
     }
+
+    // Subir Tecnomecánica
     if (req.files.tecnomecanica) {
-      vehiculo.tecnomecanica = `/uploads/${req.files.tecnomecanica[0].filename}`;
+      const tecPath = req.files.tecnomecanica[0].path;
+      const result = await cloudinary.uploader.upload(tecPath, {
+        folder: "vehiculos/documentos",
+        public_id: `${req.userId}_${vehiculo._id}_tecnomecanica`,
+        overwrite: true,
+      });
+      vehiculo.tecnomecanica = result.secure_url;
+      fs.unlinkSync(tecPath);
     }
 
     await vehiculo.save();
