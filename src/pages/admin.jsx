@@ -505,7 +505,9 @@ const Admin = () => {
                         <td className="email-cell">{u.correo}</td>
                         <td className="telefono-cell">{u.telefono || "—"}</td>
                         <td className="rol-cell">
-                          <span className={`badge badge-${u.rol}`}>{u.rol}</span>
+                          <span className={`badge badge-${u.rol?.trim()?.toLowerCase() || 'cliente'}`}>
+                            {u.rol?.trim() || '—'}
+                          </span>
                         </td>
                         <td className="especialidad-cell">
                           {u.rol === "mecanico" ? u.especialidad || "—" : "—"}
