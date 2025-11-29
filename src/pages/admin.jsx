@@ -442,30 +442,30 @@ const Admin = () => {
           </div>
 
           {/* FILTROS */}
-          <div className="filtros">
-            <div className="filtro-grupo">
-              <input
-                type="text"
-                placeholder="Buscar por nombre o correo..."
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                className="input-busqueda"
-              />
-            </div>
-            <div className="filtro-grupo">
-              <select
-                value={filtroRol}
-                onChange={(e) => setFiltroRol(e.target.value)}
-                className="select-filtro"
-              >
-                <option value="todos">Todos los roles</option>
-                <option value="cliente">Cliente</option>
-                <option value="mecanico">Mecánico</option>
-                <option value="tienda">Tienda</option>
-                <option value="admin">Administrador</option>
-              </select>
-            </div>
-          </div>
+        <div className="filtros">
+  <div className="filtro-grupo">
+    <input
+      type="text"
+      placeholder="Buscar por nombre o correo..."
+      value={busqueda}
+      onChange={(e) => setBusqueda(e.target.value)}
+      className="input-busqueda"
+    />
+  </div>
+  <div className="filtro-grupo">
+    <select
+      value={filtroRol}
+      onChange={(e) => setFiltroRol(e.target.value)}
+      className="select-filtro"
+    >
+      <option value="todos">Todos los roles</option>
+      <option value="cliente">Cliente</option>
+      <option value="mecanico">Mecánico</option>
+      <option value="tienda">Tienda</option>
+      <option value="admin">Administrador</option>
+    </select>
+  </div>
+</div>
 
           {/* TABLA RESPONSIVA */}
           <div className="table-responsive">
@@ -482,15 +482,21 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody>
-                {usuarios.length > 0 ? (
-                  usuarios
-                    .filter(
-                      (u) =>
-                        (filtroRol === "todos" || u.rol === filtroRol) &&
-                        (busqueda === "" ||
-                          u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-                          u.correo.toLowerCase().includes(busqueda.toLowerCase()))
-                    )
+              {usuarios.length > 0 ? (
+  usuarios
+    .filter((u) => {
+      // Filtrar por rol
+      const rolCoincide =
+        filtroRol === "todos" || u.rol.toLowerCase() === filtroRol.toLowerCase();
+
+      // Filtrar por búsqueda en nombre o correo
+      const busquedaCoincide =
+        busqueda === "" ||
+        u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        u.correo.toLowerCase().includes(busqueda.toLowerCase());
+
+      return rolCoincide && busquedaCoincide;
+    })
                     .map((u) => (
                       <tr key={u._id} className={u.activo ? "" : "inactivo"}>
                         <td className="nombre-cell">
