@@ -122,7 +122,8 @@ export default function Carrito() {
             <tr key={item.id}>
               <td>
                 <div className="producto-info">
-                  <img src={`http://localhost:3000${item.imagen}`} alt={item.nombre} />
+                 <img src={item.imagen} alt={item.nombre} className="producto-img" />
+
                   <span>{item.nombre}</span>
                 </div>
               </td>
