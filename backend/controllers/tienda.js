@@ -1,6 +1,7 @@
-//backend/controller/tienda.js 
+// backend/controller/tienda.js
 import Tienda from "../models/tienda.js";
 import Usuario from "../models/usuario.js";
+import { v2 as cloudinary } from "./config/cloudinary.js";
 
 // RF-004: Registro de tienda y documentos legales
 export const registrarTienda = async (req, res) => {
@@ -32,7 +33,6 @@ export const registrarTienda = async (req, res) => {
 export const obtenerTienda = async (req, res) => {
   try {
     const { tiendaId } = req.params;
-    // Buscar el usuario (tienda) por su ID
     const usuario = await Usuario.findById(tiendaId).select('nombre descripcion telefono correo imagen zona');
     if (!usuario) return res.status(404).json({ error: "Tienda no encontrada" });
     res.json({ usuario });
@@ -46,13 +46,9 @@ export const actualizarTienda = async (req, res) => {
   try {
     const { tiendaId } = req.params;
     const { nombre, descripcion, telefono, email, ubicacion, direccion } = req.body;
-    
-    console.log('Actualizando tienda:', { tiendaId, nombre, descripcion, telefono, email, ubicacion, direccion });
-    
-    // Usar direccion si viene, si no usar ubicacion, si no dejar vacío
+
     const zonaFinal = direccion || ubicacion || '';
-    
-    // Actualizar usuario (tienda)
+
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
       tiendaId,
       { 
@@ -64,10 +60,9 @@ export const actualizarTienda = async (req, res) => {
       },
       { new: true }
     ).select('nombre descripcion telefono correo imagen zona');
-    
+
     if (!usuarioActualizado) return res.status(404).json({ error: "Tienda no encontrada" });
-    
-    console.log('Tienda actualizada:', usuarioActualizado);
+
     res.json({ usuario: usuarioActualizado });
   } catch (error) {
     console.error('Error al actualizar tienda:', error);
@@ -75,7 +70,7 @@ export const actualizarTienda = async (req, res) => {
   }
 };
 
-// Actualizar foto de tienda
+// Actualizar foto de tienda en Cloudinary
 export const actualizarFotoTienda = async (req, res) => {
   try {
     const { tiendaId } = req.params;
@@ -84,12 +79,17 @@ export const actualizarFotoTienda = async (req, res) => {
       return res.status(400).json({ error: "No se subió ninguna foto" });
     }
 
-    const imagenPath = `/uploads/${req.file.filename}`;
+    // Subir imagen a Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "tiendas",
+      use_filename: true,
+      unique_filename: false,
+    });
 
-    // Actualizar usuario (tienda) con la imagen
+    // Guardar URL de Cloudinary en la BD
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
       tiendaId,
-      { imagen: imagenPath },
+      { imagen: result.secure_url },
       { new: true }
     );
 
