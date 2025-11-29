@@ -1,7 +1,8 @@
 // backend/controller/tienda.js
 import Tienda from "../models/tienda.js";
 import Usuario from "../models/usuario.js";
-import { v2 as cloudinary } from "./config/cloudinary.js";
+import cloudinary from '../config/Cloudinary.js';
+
 
 // RF-004: Registro de tienda y documentos legales
 export const registrarTienda = async (req, res) => {
