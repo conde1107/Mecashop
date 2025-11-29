@@ -3,6 +3,13 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/productodetalle.css";
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+const buildImgUrl = (img) => {
+  if (!img) return "/img/default-product.png";
+  return img.startsWith("http") ? img : `${API_BASE}/uploads/${img}`;
+};
+
 const ProductoDetalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -18,7 +25,7 @@ const ProductoDetalle = () => {
   useEffect(() => {
     const fetchProducto = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/productos/${id}`);
+        const res = await fetch(`${API_BASE}/api/productos/${id}`);
         const data = await res.json();
         setProducto(data);
       } catch (error) {
@@ -28,7 +35,7 @@ const ProductoDetalle = () => {
 
     const fetchCalificaciones = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/calificacion-producto/${id}`);
+        const res = await fetch(`${API_BASE}/api/calificacion-producto/${id}`);
         const data = await res.json();
         setCalificaciones(data);
       } catch (error) {
@@ -40,25 +47,22 @@ const ProductoDetalle = () => {
     fetchCalificaciones();
   }, [id]);
 
-  // ✅ Agregar al carrito con validación
+  // ✅ Agregar al carrito
   const agregarAlCarrito = () => {
-    // Verificar si el usuario está logueado
-    const token = localStorage.getItem("token");
     if (!token) {
       alert("Debes iniciar sesión primero para agregar productos al carrito");
       return;
     }
 
     if (!producto || !producto._id) {
-      console.error("❌ Producto inválido:", producto);
+      console.error("Producto inválido:", producto);
       alert("Error: no se pudo agregar el producto al carrito.");
       return;
     }
 
     try {
       let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-      const index = carrito.findIndex(item => item.id === producto._id);
+      const index = carrito.findIndex((item) => item.id === producto._id);
 
       if (index !== -1) {
         carrito[index].cantidad = (carrito[index].cantidad || 1) + 1;
@@ -73,15 +77,15 @@ const ProductoDetalle = () => {
       }
 
       localStorage.setItem("carrito", JSON.stringify(carrito));
-      console.log("✅ Carrito actual:", carrito); // DEBUG
+      console.log("Carrito actual:", carrito);
       alert("Producto agregado al carrito ✅");
     } catch (error) {
-      console.error("❌ Error al agregar al carrito:", error);
+      console.error("Error al agregar al carrito:", error);
       alert("Error inesperado al agregar producto al carrito.");
     }
   };
 
-  // ✅ Función para enviar calificación
+  // ✅ Enviar calificación
   const enviarCalificacion = async () => {
     if (!estrella) return alert("Selecciona una calificación");
     if (!token) return alert("Debes estar logueado para calificar");
@@ -89,7 +93,7 @@ const ProductoDetalle = () => {
     const nueva = { productoId: id, calificacion: estrella, comentario };
 
     try {
-      const res = await fetch("http://localhost:3000/api/calificacion-producto", {
+      const res = await fetch(`${API_BASE}/api/calificacion-producto`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -109,8 +113,8 @@ const ProductoDetalle = () => {
       setEstrella(0);
       setComentario("");
 
-      // Recargar calificaciones después de guardar
-      const actualizar = await fetch(`http://localhost:3000/api/calificacion-producto/${id}`);
+      // Recargar calificaciones
+      const actualizar = await fetch(`${API_BASE}/api/calificacion-producto/${id}`);
       const calificacionesActualizadas = await actualizar.json();
       setCalificaciones(calificacionesActualizadas);
     } catch (error) {
@@ -125,11 +129,11 @@ const ProductoDetalle = () => {
     <div className="detalle-container">
       <div className="detalle-card">
         <img
-  src={producto.imagenURL || '/img/default-product.png'}
-  alt={producto.nombre}
-  className="detalle-imagen"
-  onError={(e) => { e.target.src = '/img/default-product.png'; }}
-/>
+          src={buildImgUrl(producto.imagenURL)}
+          alt={producto.nombre}
+          className="detalle-imagen"
+          onError={(e) => { e.target.src = "/img/default-product.png"; }}
+        />
 
         <div className="detalle-info">
           <h2>{producto.nombre}</h2>
@@ -150,7 +154,7 @@ const ProductoDetalle = () => {
         <h3>Calificar este producto</h3>
 
         <div className="estrellas">
-          {[1, 2, 3, 4, 5].map(n => (
+          {[1, 2, 3, 4, 5].map((n) => (
             <span
               key={n}
               className={n <= estrella ? "estrella active" : "estrella"}
@@ -181,7 +185,9 @@ const ProductoDetalle = () => {
             <div key={i} className="comentario-card">
               <div className="comentario-header">
                 <strong>{c.usuarioId?.nombre || "Usuario Anónimo"}</strong>
-                <span className="calificacion-stars">{"★".repeat(c.calificacion)}</span>
+                <span className="calificacion-stars">
+                  {"★".repeat(c.calificacion)}
+                </span>
               </div>
               {c.comentario && <p className="comentario-texto">{c.comentario}</p>}
               <small className="comentario-fecha">

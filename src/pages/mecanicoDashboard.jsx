@@ -79,10 +79,10 @@ const MecanicoDashboard = () => {
   };
 
   const buildImgUrl = (img) => {
-    if (!img) return null;
-    if (img.startsWith("http")) return img;
-    return img.startsWith("/") ? `${API_BASE}${img}` : `${API_BASE}/uploads/${img}`;
-  };
+  if (!img) return null;
+  // Si la imagen ya es una URL completa (Cloudinary), la usamos tal cual
+  return img.startsWith("http") ? img : `${API_BASE}/uploads/${img}`;
+};
 
   // ===========================
   // Cargar datos del mecánico
@@ -324,12 +324,13 @@ const MecanicoDashboard = () => {
         <div className="perfil-header">
           <div className="perfil-img-container">
             {previewImagen ? (
-              <img className="perfil-img" src={previewImagen} alt="Preview" />
-            ) : perfil.imagen ? (
-              <img className="perfil-img" src={buildImgUrl(perfil.imagen)} alt="Perfil" />
-            ) : (
+          <img className="perfil-img" src={previewImagen} alt="Preview" />
+          ) : perfil.imagen ? (
+                       <img className="perfil-img" src={buildImgUrl(perfil.imagen)} alt="Perfil" />
+                ) : (
               <div className="no-img">Sin imagen</div>
-            )}
+                              )}
+
             <div className="img-upload">
               <input type="file" accept="image/*" onChange={handleImagenChange} />
               <button onClick={subirImagen} disabled={subiendoImagen} className="btn save">

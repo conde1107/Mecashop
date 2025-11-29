@@ -2,6 +2,8 @@ const Usuario = require('../models/usuario');
 const ServicioOfrecido = require('../models/servicioOfrecido');
 const Solicitud = require('../models/solicitud');
 const Servicio = require('../models/servicio');
+const cloudinary = require('../config/Cloudinary'); // ajusta la ruta según tu proyecto
+
 
 // Obtener todos los mecánicos
 exports.obtenerMecanicos = async (req, res) => {
@@ -46,13 +48,14 @@ exports.actualizarFotoPerfil = async (req, res) => {
       return res.status(400).json({ mensaje: "No se subió ninguna foto" });
     }
 
-    const imagenPath = `/uploads/${req.file.filename}`;
+  const imagenCloudinary = req.file.path;
+
 
     const mecanico = await Usuario.findByIdAndUpdate(
-      mecanicoId,
-      { imagen: imagenPath },
-      { new: true }
-    );
+  mecanicoId,
+  { imagen: imagenCloudinary },
+  { new: true }
+);
 
     if (!mecanico) return res.status(404).json({ mensaje: "Mecánico no encontrado" });
 
