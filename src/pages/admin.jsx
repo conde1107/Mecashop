@@ -505,7 +505,7 @@ const Admin = () => {
                         <td className="email-cell">{u.correo}</td>
                         <td className="telefono-cell">{u.telefono || "—"}</td>
                         <td className="rol-cell">
-                          <span className="badge">
+                          <span style={{color: 'black', background: 'yellow', fontWeight: 'bold'}}>
                             {u.rol?.trim() || '—'}
                           </span>
                         </td>
