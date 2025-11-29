@@ -150,10 +150,11 @@ const Directorio = () => {
         <div className="resultados-container">
           {talleres.map((t) => (
             <div key={t._id} className="taller-card">
-              <img
-                src={t.imagen ? `http://localhost:3000${t.imagen}` : "/img/default-user.png"}
-                alt={t.nombre}
-              />
+             <img
+  src={t.imagen ? t.imagen : "/img/default-user.png"}
+  alt={t.nombre}
+/>
+
               <div className="taller-info">
                 <h3>{t.nombre}</h3>
                 <p><strong>Rol:</strong> {t.rol}</p>
