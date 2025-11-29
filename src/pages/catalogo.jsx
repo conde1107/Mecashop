@@ -631,17 +631,12 @@ const Catalogo = () => {
             {productosFiltrados.map((producto) => (
               <div key={producto._id} className="producto-item">
                 <div className="producto-imagen">
-                  {producto.imagenURL ? (
-                    <img
-                      src={`${API_BASE}${producto.imagenURL}`}
-                      alt={producto.nombre}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    <div className="no-imagen">📷</div>
-                  )}
+             <img
+             src={producto.imagenURL ? `${API_BASE}${producto.imagenURL}` : '/img/default-product.png'}
+              alt={producto.nombre}
+               onError={(e) => { e.target.src = '/img/default-product.png'; }}
+                  />
+
                   <div className={`producto-badge ${producto.inventario === 0 ? 'agotado' : 'disponible'}`}>
                     {producto.inventario === 0 ? 'AGOTADO' : `${producto.inventario} en stock`}
                   </div>

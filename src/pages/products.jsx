@@ -147,11 +147,12 @@ export default function Products() {
                       style={{ cursor: "pointer" }}
                     >
                       {producto.imagenURL ? (
-                        <img
-                          src={`http://localhost:3000${producto.imagenURL}`}
-                          alt={producto.nombre}
+                       <img
+                          src={producto.imagenURL || '/placeholder.jpg'}
+                             alt={producto.nombre}
                           onError={(e) => (e.target.style.display = "none")}
-                        />
+                          />
+
                       ) : (
                         <img src="/placeholder.jpg" alt="Imagen no disponible" />
                       )}
