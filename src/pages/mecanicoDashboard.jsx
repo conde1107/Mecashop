@@ -148,8 +148,14 @@ const MecanicoDashboard = () => {
     if (!file.type.startsWith("image/")) return alert("Selecciona un archivo de imagen");
     if (file.size > 5 * 1024 * 1024) return alert("La imagen debe ser menor a 5MB");
 
+
+
     setImagenSeleccionada(file);
     setPreviewImagen(URL.createObjectURL(file));
+    
+    console.log("Archivo seleccionado:", imagenSeleccionada);
+console.log("Tipo:", imagenSeleccionada.type);
+console.log("Tamaño:", imagenSeleccionada.size);
   };
 
   const subirImagen = async () => {
