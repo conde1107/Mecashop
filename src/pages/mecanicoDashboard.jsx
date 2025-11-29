@@ -160,36 +160,36 @@ const MecanicoDashboard = () => {
   setPreviewImagen(URL.createObjectURL(file));
 };
 
-for (let pair of formData.entries()) {
-  console.log("FormData key:", pair[0], "value:", pair[1]);
-}
+const subirImagen = async () => {
+  if (!imagenSeleccionada) return alert("Selecciona una imagen primero");
 
+  const formData = new FormData();
+  formData.append("foto", imagenSeleccionada);
 
-  
+  // Depuración: verificar que el FormData tenga la imagen
+  for (let pair of formData.entries()) {
+    console.log("FormData key:", pair[0], "value:", pair[1]);
+  }
 
-  const subirImagen = async () => {
-    if (!imagenSeleccionada) return alert("Selecciona una imagen primero");
-    const formData = new FormData();
-    formData.append("foto", imagenSeleccionada);
+  try {
+    setSubiendoImagen(true);
+    const data = await apiFetch(`${API_BASE}/api/mecanicos/${mecanicoId}/foto`, {
+      method: "PUT",
+      body: formData,
+    });
 
-    try {
-      setSubiendoImagen(true);
-      const data = await apiFetch(`${API_BASE}/api/mecanicos/${mecanicoId}/foto`, {
-        method: "PUT",
-        body: formData,
-      });
-      setPerfil((prev) => ({ ...prev, imagen: data.imagen || prev.imagen }));
-      setImagenSeleccionada(null);
-      if (previewImagen) URL.revokeObjectURL(previewImagen);
-      setPreviewImagen(null);
-      alert("✅ Imagen actualizada correctamente");
-    } catch (error) {
-      console.error("Error al subir imagen:", error);
-      alert("❌ No se pudo subir la imagen");
-    } finally {
-      setSubiendoImagen(false);
-    }
-  };
+    setPerfil((prev) => ({ ...prev, imagen: data.imagen || prev.imagen }));
+    setImagenSeleccionada(null);
+    if (previewImagen) URL.revokeObjectURL(previewImagen);
+    setPreviewImagen(null);
+    alert("✅ Imagen actualizada correctamente");
+  } catch (error) {
+    console.error("Error al subir imagen:", error);
+    alert("❌ No se pudo subir la imagen");
+  } finally {
+    setSubiendoImagen(false);
+  }
+};
 
   // ===========================
   // Editar perfil
