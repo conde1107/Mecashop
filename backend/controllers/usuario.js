@@ -1,10 +1,13 @@
 // controllers/usuario.js
 const Usuario = require("../models/usuario");
+const cloudinary = require("./config/cloudinary"); // tu configuración de Cloudinary
+const fs = require("fs");
 
+// =====================
 // Obtener perfil
+// =====================
 const obtenerPerfil = async (req, res) => {
   try {
-    // Devolver campos adicionales para perfiles de mecánico
     const usuario = await Usuario.findById(req.userId).select(
       "nombre correo rol imagen descripcion telefono zona especialidad disponible activo direccion ubicacion horario"
     );
@@ -18,7 +21,9 @@ const obtenerPerfil = async (req, res) => {
   }
 };
 
+// =====================
 // Actualizar perfil
+// =====================
 const actualizarPerfil = async (req, res) => {
   try {
     console.log('[usuario.actualizarPerfil] req.body:', req.body);
@@ -32,9 +37,9 @@ const actualizarPerfil = async (req, res) => {
     if (descripcion !== undefined) actualizaciones.descripcion = descripcion;
     if (telefono !== undefined) actualizaciones.telefono = telefono;
     if (zona !== undefined) actualizaciones.zona = zona;
-    if (horario !== undefined) actualizaciones.horario = horario; // 🔹 Incluido horario
+    if (horario !== undefined) actualizaciones.horario = horario;
 
-    // Aceptar ubicacion como objeto { lat, lng }
+    // Ubicación
     if (ubicacion && typeof ubicacion === 'object') {
       const lat = parseFloat(ubicacion.lat);
       const lng = parseFloat(ubicacion.lng);
@@ -45,13 +50,23 @@ const actualizarPerfil = async (req, res) => {
 
     if (password) actualizaciones.password = password;
 
+    // Subir imagen a Cloudinary si se envía
     if (req.file) {
-      actualizaciones.imagen = `/uploads/${req.file.filename}`;
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "perfil_clientes",           // carpeta en Cloudinary
+        public_id: `${req.userId}_perfil`,   // nombre único
+        overwrite: true,
+      });
+      actualizaciones.imagen = result.secure_url;
+
+      // Opcional: eliminar archivo local temporal
+      fs.unlink(req.file.path, (err) => {
+        if (err) console.error("Error eliminando archivo temporal:", err);
+      });
     }
 
     console.log('[usuario.actualizarPerfil] actualizaciones a aplicar:', actualizaciones);
 
-    // Buscar el documento y aplicar cambios
     const usuarioDoc = await Usuario.findById(req.userId);
     if (!usuarioDoc) return res.status(404).json({ error: 'Usuario no encontrado' });
 
@@ -67,7 +82,6 @@ const actualizarPerfil = async (req, res) => {
 
     await usuarioDoc.save();
 
-    // Retornar usuario actualizado
     const usuario = await Usuario.findById(req.userId).select(
       "nombre correo rol imagen descripcion telefono zona especialidad disponible activo direccion ubicacion horario"
     );
@@ -79,7 +93,9 @@ const actualizarPerfil = async (req, res) => {
   }
 };
 
+// =====================
 // Obtener todos los usuarios
+// =====================
 const obtenerUsuarios = async (req, res) => {
   try {
     const usuarios = await Usuario.find().select(

@@ -5,13 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import "../styles/perfilcliente.css";
 
 const API_URL = "http://localhost:3000/api";
-const API_BASE = "http://localhost:3000";
-
-const buildImgUrl = (img) => {
-  if (!img) return null;
-  if (img.startsWith("http")) return img;
-  return img.startsWith("/") ? `${API_BASE}${img}` : `${API_BASE}/uploads/${img}`;
-};
 
 function Modal({ open, title, children, onClose }) {
   if (!open) return null;
@@ -29,31 +22,38 @@ function Modal({ open, title, children, onClose }) {
 }
 
 export default function PerfilCliente() {
-  const [perfil, setPerfil] = useState({ nombre: "", correo: "", descripcion: "", imagen: "", telefono: "", zona: "", lat: null, lng: null });
-  const [editando, setEditando] = useState(false);
+  const [perfil, setPerfil] = useState({
+    nombre: "",
+    correo: "",
+    descripcion: "",
+    imagen: "",
+    telefono: "",
+    zona: "",
+    lat: null,
+    lng: null,
+  });
 
+  const [editando, setEditando] = useState(false);
   const [fotoSeleccionada, setFotoSeleccionada] = useState(null);
   const [previewFoto, setPreviewFoto] = useState(null);
   const [subiendoFoto, setSubiendoFoto] = useState(false);
-
-  const loadingPerfilDefault = true;
-  const [loadingPerfil, setLoadingPerfil] = useState(loadingPerfilDefault);
+  const [loadingPerfil, setLoadingPerfil] = useState(true);
 
   const token = localStorage.getItem("token");
-  if (!token) {
-    if (typeof window !== "undefined") window.location.href = "/login";
-  }
+  if (!token && typeof window !== "undefined") window.location.href = "/login";
 
+  // ============================
+  // Cargar perfil
+  // ============================
   const cargarPerfil = async () => {
     setLoadingPerfil(true);
     try {
-      const res = await fetch(`${API_URL}/usuario/perfil`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API_URL}/usuario/perfil`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
-      if (res.ok) {
-        setPerfil(data);
-      } else {
-        setPerfil(data);
-      }
+      if (res.ok) setPerfil(data);
+      else setPerfil(data);
     } catch (err) {
       console.error("Error al cargar perfil:", err);
       toast.error("Error al cargar perfil");
@@ -67,7 +67,7 @@ export default function PerfilCliente() {
   }, []);
 
   // ============================
-  // Manejar selección y preview
+  // Selección y preview de foto
   // ============================
   const handleSeleccionarFoto = (e) => {
     const file = e.target.files[0];
@@ -98,7 +98,10 @@ export default function PerfilCliente() {
       if (res.ok) {
         toast.success("Foto actualizada");
         const usuarioActualizado = data.usuario || data;
-        setPerfil((prev) => ({ ...prev, imagen: usuarioActualizado.imagen || prev.imagen }));
+        setPerfil((prev) => ({
+          ...prev,
+          imagen: usuarioActualizado.imagen || prev.imagen,
+        }));
         setFotoSeleccionada(null);
         if (previewFoto) URL.revokeObjectURL(previewFoto);
         setPreviewFoto(null);
@@ -111,32 +114,32 @@ export default function PerfilCliente() {
     }
   };
 
+  // ============================
+  // Guardar cambios de perfil
+  // ============================
   const handleGuardarPerfil = async (e) => {
     e && e.preventDefault();
-    
+
     const payload = {
       nombre: perfil.nombre || "",
       correo: perfil.correo || "",
       descripcion: perfil.descripcion || "",
       telefono: perfil.telefono || "",
-      zona: perfil.zona || ""
+      zona: perfil.zona || "",
     };
 
     if (perfil.lat && perfil.lng) {
-      payload.ubicacion = {
-        lat: perfil.lat,
-        lng: perfil.lng
-      };
+      payload.ubicacion = { lat: perfil.lat, lng: perfil.lng };
     }
 
     try {
       const res = await fetch(`${API_URL}/usuario/perfil`, {
         method: "PUT",
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (res.ok) {
@@ -150,11 +153,11 @@ export default function PerfilCliente() {
   };
 
   // ============================
-  // Geolocalización
+  // Detectar ubicación
   // ============================
   const detectarUbicacion = () => {
     if (!navigator.geolocation) {
-      toast.error("Geolocalización no es soportada por tu navegador");
+      toast.error("Geolocalización no soportada");
       return;
     }
 
@@ -167,12 +170,15 @@ export default function PerfilCliente() {
       },
       (error) => {
         console.error(error);
-        toast.error("No se pudo obtener la ubicación. Permite el acceso a la ubicación.");
+        toast.error("No se pudo obtener la ubicación");
       },
       { enableHighAccuracy: true }
     );
   };
 
+  // ============================
+  // Render
+  // ============================
   return (
     <div className="perfil-container">
       <ToastContainer position="top-center" autoClose={2500} />
@@ -185,25 +191,28 @@ export default function PerfilCliente() {
       ) : (
         <section className="perfil-section">
           <div className="perfil-card-new">
-            {/* FOTO DE PERFIL CENTRADA */}
             <div className="perfil-foto-section">
               <div className="perfil-foto-wrapper">
                 {previewFoto ? (
                   <img src={previewFoto} alt="Preview" className="perfil-foto-grande" />
                 ) : perfil.imagen ? (
-                  <img src={buildImgUrl(perfil.imagen)} alt="Foto" className="perfil-foto-grande" />
+                  <img src={perfil.imagen} alt="Foto" className="perfil-foto-grande" />
                 ) : (
                   <div className="perfil-foto-placeholder-grande">👤</div>
                 )}
               </div>
 
-              {/* BOTÓN CAMBIAR IMAGEN DEBAJO */}
               <div className="perfil-button-section">
                 <label htmlFor="input-foto" className="btn-cambiar-imagen">
                   Cambiar Imagen
                 </label>
-                <input id="input-foto" type="file" accept="image/*" onChange={handleSeleccionarFoto} className="input-file-oculto" />
-
+                <input
+                  id="input-foto"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleSeleccionarFoto}
+                  className="input-file-oculto"
+                />
                 {fotoSeleccionada && (
                   <button className="btn-subir-foto" onClick={subirFotoPerfil} disabled={subiendoFoto}>
                     {subiendoFoto ? "Subiendo..." : "Confirmar"}
@@ -212,10 +221,8 @@ export default function PerfilCliente() {
               </div>
             </div>
 
-            {/* INFORMACIÓN DEL PERFIL - DEBAJO DE LA FOTO */}
             <div className="perfil-info-section">
               <div className="perfil-nombre-grande">{perfil.nombre}</div>
-              
               <div className="perfil-datos">
                 <p className="dato-simple">{perfil.correo}</p>
                 <p className="dato-simple">{perfil.telefono || "Sin teléfono"}</p>
@@ -224,11 +231,7 @@ export default function PerfilCliente() {
               </div>
 
               <div className="perfil-botones">
-                <button 
-                  type="button" 
-                  className="btn-editar-info"
-                  onClick={() => setEditando(!editando)}
-                >
+                <button type="button" className="btn-editar-info" onClick={() => setEditando(!editando)}>
                   {editando ? "✕ Cerrar" : " Editar Información"}
                 </button>
               </div>
@@ -238,42 +241,42 @@ export default function PerfilCliente() {
                   <div className="form-section">
                     <div className="form-group-modal">
                       <label>Nombre</label>
-                      <input 
-                        type="text" 
-                        className="input-modal" 
-                        value={perfil.nombre} 
-                        onChange={(e) => setPerfil({ ...perfil, nombre: e.target.value })} 
-                        required 
+                      <input
+                        type="text"
+                        className="input-modal"
+                        value={perfil.nombre}
+                        onChange={(e) => setPerfil({ ...perfil, nombre: e.target.value })}
+                        required
                       />
                     </div>
 
                     <div className="form-group-modal">
                       <label>Correo</label>
-                      <input 
-                        type="email" 
-                        className="input-modal" 
-                        value={perfil.correo} 
-                        onChange={(e) => setPerfil({ ...perfil, correo: e.target.value })} 
-                        required 
+                      <input
+                        type="email"
+                        className="input-modal"
+                        value={perfil.correo}
+                        onChange={(e) => setPerfil({ ...perfil, correo: e.target.value })}
+                        required
                       />
                     </div>
 
                     <div className="form-group-modal">
                       <label>Teléfono</label>
-                      <input 
-                        type="tel" 
-                        className="input-modal" 
-                        value={perfil.telefono || ""} 
-                        onChange={(e) => setPerfil({ ...perfil, telefono: e.target.value })} 
-                        placeholder="Ej: +57 300 1234567" 
+                      <input
+                        type="tel"
+                        className="input-modal"
+                        value={perfil.telefono || ""}
+                        onChange={(e) => setPerfil({ ...perfil, telefono: e.target.value })}
+                        placeholder="Ej: +57 300 1234567"
                       />
                     </div>
 
                     <div className="form-group-modal">
                       <label>Descripción</label>
-                      <textarea 
-                        className="textarea-modal" 
-                        value={perfil.descripcion} 
+                      <textarea
+                        className="textarea-modal"
+                        value={perfil.descripcion}
                         onChange={(e) => setPerfil({ ...perfil, descripcion: e.target.value })}
                       ></textarea>
                     </div>
@@ -281,18 +284,14 @@ export default function PerfilCliente() {
                     <div className="form-group-modal">
                       <label>Zona/Ubicación</label>
                       <div className="zona-input-group">
-                        <input 
-                          type="text" 
-                          className="input-modal" 
-                          value={perfil.zona || ""} 
-                          onChange={(e) => setPerfil({ ...perfil, zona: e.target.value })} 
-                          placeholder="Tu zona de cobertura" 
+                        <input
+                          type="text"
+                          className="input-modal"
+                          value={perfil.zona || ""}
+                          onChange={(e) => setPerfil({ ...perfil, zona: e.target.value })}
+                          placeholder="Tu zona de cobertura"
                         />
-                        <button 
-                          type="button" 
-                          className="btn-detectar" 
-                          onClick={detectarUbicacion}
-                        >
+                        <button type="button" className="btn-detectar" onClick={detectarUbicacion}>
                           📍 Detectar
                         </button>
                       </div>
