@@ -181,6 +181,7 @@ const Admin = () => {
 
       alert('Usuario actualizado correctamente');
       setEditingUser(null);
+      setFiltroRol('todos');
       cargarUsuarios();
     } catch (error) {
       console.error('Error al guardar usuario editado:', error);

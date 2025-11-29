@@ -430,8 +430,7 @@ export default function MisVehiculos() {
               </select>
             </div>
           </div>
-
-      <div className="form-inputs">
+<div className="form-inputs">
   {/* Otros campos ... */}
 
   <div className="input-group">
@@ -441,6 +440,7 @@ export default function MisVehiculos() {
       id="fechaCompraSoat"
       value={nuevoVehiculo.fechaCompraSoat}
       onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraSoat: e.target.value })}
+      min={new Date().toISOString().split("T")[0]} // ⚡ fecha mínima = hoy
     />
   </div>
 
@@ -451,6 +451,7 @@ export default function MisVehiculos() {
       id="fechaCompraTeconomecanica"
       value={nuevoVehiculo.fechaCompraTeconomecanica}
       onChange={(e) => setNuevoVehiculo({ ...nuevoVehiculo, fechaCompraTeconomecanica: e.target.value })}
+      min={new Date().toISOString().split("T")[0]} // ⚡ fecha mínima = hoy
     />
   </div>
 </div>
