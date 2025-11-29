@@ -1,6 +1,7 @@
 // controllers/usuario.js
 const Usuario = require("../models/usuario");
-const cloudinary = require("./config/cloudinary"); // tu configuración de Cloudinary
+const cloudinary = require("../config/Cloudinary");
+// tu configuración de Cloudinary
 const fs = require("fs");
 
 // =====================
