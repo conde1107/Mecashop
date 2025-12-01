@@ -435,7 +435,7 @@ const subirImagen = async () => {
               onChange={handlePerfilChange}
             />
             <div className="perfil-buttons">
-              <button type="submit" className="btn save">Guardar</button>
+              <button type="submit" className="btn guardar-rojo">Guardar</button>
               <button type="button" className="btn cancel" onClick={() => setEditando(false)}>Cancelar</button>
             </div>
           </form>
