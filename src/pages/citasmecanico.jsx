@@ -97,10 +97,7 @@ const CitasMecanico = () => {
                     <ul className="lista-servicios">
                       {cita.servicios.map((servicio, index) => (
                         <li key={index}>
-                          {servicio.nombreServicio}{" "}
-                          <span className="precio-servicio">
-                            (${servicio.precio})
-                          </span>
+                          {servicio.nombreServicio}
                         </li>
                       ))}
                     </ul>
