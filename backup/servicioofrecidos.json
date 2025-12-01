@@ -1,0 +1,2 @@
+{"_id":{"$oid":"6920b3181cca172e15424d19"},"mecanicoId":{"$oid":"68f00967968ebb6535dd693b"},"nombre":"revision diagnostica","descripcion":"le reviso el carro ","precioEstimado":2000,"negociable":false,"activo":true,"creadoEn":{"$date":"2025-11-21T18:44:40.154Z"},"__v":0}
+{"_id":{"$oid":"6921095bea28ef116f894d6e"},"mecanicoId":{"$oid":"68f00967968ebb6535dd693b"},"nombre":"cambio aceite","descripcion":"aceite","precioEstimado":20000,"negociable":false,"activo":true,"creadoEn":{"$date":"2025-11-22T00:52:43.331Z"},"__v":0}

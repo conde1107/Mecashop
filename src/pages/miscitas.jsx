@@ -138,7 +138,6 @@ const MisCitas = () => {
               <div className="cita-info">
                 {cita.nombreServicio && <p><strong>Servicio:</strong> {cita.nombreServicio}</p>}
                 {cita.descripcion && <p><strong>Descripción:</strong> {cita.descripcion}</p>}
-                {cita.precio && cita.precio > 0 && <p><strong>Precio:</strong> ${cita.precio}</p>}
                 {cita.fecha && <p><strong>Fecha:</strong> {cita.fecha}</p>}
                 {cita.hora && <p><strong>Hora:</strong> {cita.hora}</p>}
                 <p><strong>Mecánico:</strong> {cita.mecanicoId?.nombre || "No especificado"}</p>

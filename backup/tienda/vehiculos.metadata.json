@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"placa":{"$numberInt":"1"}},"name":"placa_1","background":true,"unique":true}],"uuid":"b433230131ab4651bd08db92e594fcec","collectionName":"vehiculos","type":"collection"}
