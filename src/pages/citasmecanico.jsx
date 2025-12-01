@@ -93,17 +93,9 @@ const CitasMecanico = () => {
 
                 {/* ✅ Mostrar todos los servicios */}
                 <td>
-                  {Array.isArray(cita.servicios) && cita.servicios.length > 0 ? (
-                    <ul className="lista-servicios">
-                      {cita.servicios.map((servicio, index) => (
-                        <li key={index}>
-                          {servicio.nombreServicio}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    "Sin servicios"
-                  )}
+                  {Array.isArray(cita.servicios) && cita.servicios.length > 0
+                    ? cita.servicios.map(s => s.nombreServicio).join(", ")
+                    : "Sin servicios"}
                 </td>
 
                 <td>{cita.fecha}</td>
