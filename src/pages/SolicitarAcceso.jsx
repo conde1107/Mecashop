@@ -29,7 +29,7 @@ export default function SolicitarAcceso() {
     setEnviando(true);
     setMensaje('');
 
-    console.log('📤 Datos del formulario a enviar:', formData);
+    console.log(' Datos del formulario a enviar:', formData);
 
     try {
       const response = await fetch('http://localhost:3000/api/solicitud-acceso', {
@@ -38,7 +38,7 @@ export default function SolicitarAcceso() {
         body: JSON.stringify(formData)
       });
 
-      console.log('📥 Respuesta del servidor:', response.status);
+      console.log(' Respuesta del servidor:', response.status);
 
       const data = await response.json();
 

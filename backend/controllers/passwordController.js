@@ -46,14 +46,14 @@ exports.forgotPassword = async (req, res) => {
     await sendgrid.send({
       to: correo,
       from: process.env.EMAIL_FROM, // Debe ser un remitente verificado en SendGrid
-      subject: '🔐 Recuperación de contraseña - Mecashop',
+      subject: ' Recuperación de contraseña - Mecashop',
       html,
     });
 
     return res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
 
   } catch (error) {
-    console.error('❌ Error en forgotPassword:', error);
+    console.error(' Error en forgotPassword:', error);
     return res.status(500).json({ msg: 'Error enviando el correo.' });
   }
 };
@@ -88,7 +88,7 @@ exports.resetPassword = async (req, res) => {
 
     return res.json({ msg: 'Contraseña actualizada correctamente.' });
   } catch (error) {
-    console.error('❌ Error en resetPassword:', error);
+    console.error(' Error en resetPassword:', error);
     return res.status(500).json({ msg: 'Error al restablecer la contraseña.' });
   }
 };
@@ -114,7 +114,7 @@ exports.verifyToken = async (req, res) => {
       tiempoRestante: tiempoRestante > 0 ? tiempoRestante : 0,
     });
   } catch (error) {
-    console.error('❌ Error en verifyToken:', error);
+    console.error(' Error en verifyToken:', error);
     return res.status(500).json({ msg: 'Error verificando el token.' });
   }
 };

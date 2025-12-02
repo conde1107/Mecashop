@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs");
 
 // =============================
-// 📄 GENERAR INFORME PDF
+//  GENERAR INFORME PDF
 // =============================
 exports.generarInformePDF = async (req, res) => {
   try {
@@ -43,7 +43,7 @@ exports.generarInformePDF = async (req, res) => {
 };
 
 // =============================
-// 🌟 CALIFICAR SERVICIO
+//  CALIFICAR SERVICIO
 // =============================
 exports.calificarServicio = async (req, res) => {
   try {
@@ -67,15 +67,15 @@ exports.calificarServicio = async (req, res) => {
 
     await mantenimiento.save();
 
-    res.json({ mensaje: "✅ Calificación registrada correctamente" });
+    res.json({ mensaje: " Calificación registrada correctamente" });
   } catch (error) {
-    console.error("❌ Error al calificar servicio:", error);
+    console.error(" Error al calificar servicio:", error);
     res.status(500).json({ error: "Error al registrar la calificación" });
   }
 };
 
 // =============================
-// 📋 OBTENER SERVICIOS RECIENTES (últimos 30 días)
+//  OBTENER SERVICIOS RECIENTES (últimos 30 días)
 // =============================
 exports.obtenerServiciosRecientes = async (req, res) => {
   try {
@@ -99,7 +99,7 @@ exports.obtenerServiciosRecientes = async (req, res) => {
 };
 
 // =============================
-// 🔧 ACTUALIZAR ÚLTIMO MANTENIMIENTO
+//  ACTUALIZAR ÚLTIMO MANTENIMIENTO
 // =============================
 exports.registrarUltimoMantenimiento = async (req, res) => {
   try {
@@ -157,7 +157,7 @@ exports.registrarUltimoMantenimiento = async (req, res) => {
 };
 
 // =============================
-// 📋 OBTENER MANTENIMIENTOS POR VEHÍCULO
+//  OBTENER MANTENIMIENTOS POR VEHÍCULO
 // =============================
 exports.obtenerMantenimientosPorVehiculo = async (req, res) => {
   try {
@@ -171,7 +171,7 @@ exports.obtenerMantenimientosPorVehiculo = async (req, res) => {
     const vehiculo = await Vehiculo.findById(vehiculoId);
     
     if (!vehiculo || vehiculo.usuarioId.toString() !== clienteId) {
-      console.log("❌ Vehículo no encontrado o no pertenece al usuario");
+      console.log(" Vehículo no encontrado o no pertenece al usuario");
       return res.status(404).json({ mensaje: "Vehículo no encontrado" });
     }
 
@@ -180,14 +180,14 @@ exports.obtenerMantenimientosPorVehiculo = async (req, res) => {
       .populate("usuario", "nombre")
       .sort({ fecha: -1 });
 
-    console.log(`✅ Mantenimientos encontrados: ${mantenimientos.length}`);
+    console.log(` Mantenimientos encontrados: ${mantenimientos.length}`);
     mantenimientos.forEach(m => {
       console.log(`   - ${m.descripcion} | Fecha: ${m.fecha} | Km: ${m.kilometraje}`);
     });
 
     res.json(mantenimientos);
   } catch (error) {
-    console.error("❌ Error obtenerMantenimientosPorVehiculo:", error);
+    console.error(" Error obtenerMantenimientosPorVehiculo:", error);
     res.status(500).json({ mensaje: "Error al obtener mantenimientos del vehículo" });
   }
 };

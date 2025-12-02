@@ -2,7 +2,7 @@ const path = require("path");
 const Servicio = require("../models/servicio");
 const Solicitud = require("../models/solicitud");
 
-// ✅ Obtener servicios del mecánico
+//  Obtener servicios del mecánico
 exports.obtenerServiciosDeMecanico = async (req, res) => {
   try {
     const servicios = await Servicio.find({ mecanicoId: req.params.mecanicoId })
@@ -17,7 +17,7 @@ exports.obtenerServiciosDeMecanico = async (req, res) => {
   }
 };
 
-// ✅ Obtener servicios del cliente (nuevo)
+//  Obtener servicios del cliente (nuevo)
 exports.obtenerServiciosDeCliente = async (req, res) => {
   try {
     const servicios = await Servicio.find({ clienteId: req.params.clienteId })
@@ -31,25 +31,25 @@ exports.obtenerServiciosDeCliente = async (req, res) => {
   }
 };
 
-// ✅ Obtener servicios completados por vehículo (con informes PDF)
+//  Obtener servicios completados por vehículo (con informes PDF)
 exports.obtenerServiciosPorVehiculo = async (req, res) => {
   try {
     const { vehiculoId } = req.params;
     const clienteId = req.userId; // Del token
     
-    console.log(`🔍 Buscando servicios para vehículo ${vehiculoId}, cliente ${clienteId}`);
+    console.log(` Buscando servicios para vehículo ${vehiculoId}, cliente ${clienteId}`);
     
     // Obtener solicitudes del vehículo
     const Solicitud = require("../models/solicitud");
     const solicitudes = await Solicitud.find({ vehiculoId, clienteId });
     
-    console.log(`📋 Solicitudes encontradas: ${solicitudes.length}`);
+    console.log(` Solicitudes encontradas: ${solicitudes.length}`);
     if (solicitudes.length > 0) {
       solicitudes.forEach(s => console.log(`   - Solicitud ${s._id}: ${s.estado}`));
     }
     
     if (!solicitudes || solicitudes.length === 0) {
-      console.log("⚠️ Sin solicitudes para este vehículo");
+      console.log(" Sin solicitudes para este vehículo");
       // Intentar buscar servicios directamente por clienteId (sin pasar por solicitudes)
       const servicios = await Servicio.find({ clienteId })
         .populate("mecanicoId", "nombre correo")
@@ -59,7 +59,7 @@ exports.obtenerServiciosPorVehiculo = async (req, res) => {
       // Filtrar solo los que pertenecen a este vehículo (a través de la solicitud)
       const serviciosFiltrados = servicios.filter(s => s.solicitudId?.vehiculoId?.toString() === vehiculoId);
       
-      console.log(`✅ Servicios encontrados (alternativo): ${serviciosFiltrados.length}`);
+      console.log(` Servicios encontrados (alternativo): ${serviciosFiltrados.length}`);
       return res.json(serviciosFiltrados);
     }
     
@@ -73,24 +73,24 @@ exports.obtenerServiciosPorVehiculo = async (req, res) => {
       .populate("solicitudId", "fecha vehiculoId estado")
       .sort({ fechaCreacion: -1 });
     
-    console.log(`📊 Total de servicios encontrados: ${todoServicios.length}`);
+    console.log(` Total de servicios encontrados: ${todoServicios.length}`);
     
     // Retornar todos (con o sin informe)
     const servicios = todoServicios;
     
-    console.log(`✅ Servicios encontrados: ${servicios.length}`);
+    console.log(` Servicios encontrados: ${servicios.length}`);
     servicios.forEach(s => {
       console.log(`   - ${s.nombreServicio} | Informe: ${s.informe || 'Sin informe'} | Estado: ${s.estado}`);
     });
 
     res.json(servicios);
   } catch (error) {
-    console.error("❌ Error obtenerServiciosPorVehiculo:", error);
+    console.error(" Error obtenerServiciosPorVehiculo:", error);
     res.status(500).json({ mensaje: "Error al obtener servicios del vehículo" });
   }
 };
 
-// ✅ Subir informe PDF del mecánico
+//  Subir informe PDF del mecánico
 exports.subirInforme = async (req, res) => {
   try {
     if (!req.file) {
@@ -108,7 +108,7 @@ exports.subirInforme = async (req, res) => {
     }
 
     res.json({
-      mensaje: "✅ Informe subido correctamente",
+      mensaje: " Informe subido correctamente",
       servicio,
       urlInforme: `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`,
     });
@@ -118,7 +118,7 @@ exports.subirInforme = async (req, res) => {
   }
 };
 
-// ✅ Crear servicio desde cita aceptada (admite múltiples servicios)
+//  Crear servicio desde cita aceptada (admite múltiples servicios)
 exports.crearDesdeCita = async (req, res) => {
   try {
     const { solicitudId } = req.params;
@@ -164,7 +164,7 @@ exports.crearDesdeCita = async (req, res) => {
     }
 
     res.json({
-      mensaje: "✅ Servicios creados correctamente",
+      mensaje: " Servicios creados correctamente",
       servicios: serviciosCreados,
     });
   } catch (error) {
@@ -173,7 +173,7 @@ exports.crearDesdeCita = async (req, res) => {
   }
 };
 
-// ✅ Completar un servicio
+//  Completar un servicio
 exports.completarServicio = async (req, res) => {
   try {
     const servicio = await Servicio.findById(req.params.id);
@@ -198,14 +198,14 @@ exports.completarServicio = async (req, res) => {
       }
     }
 
-    res.json({ mensaje: "✅ Servicio completado correctamente", servicio });
+    res.json({ mensaje: " Servicio completado correctamente", servicio });
   } catch (error) {
     console.error("❌ Error completarServicio:", error);
     res.status(500).json({ mensaje: "Error al completar servicio" });
   }
 };
 
-// ✅ Calificar servicio (cliente)
+// Calificar servicio (cliente)
 exports.calificarServicio = async (req, res) => {
   try {
     const servicio = await Servicio.findById(req.params.id);
@@ -222,14 +222,14 @@ exports.calificarServicio = async (req, res) => {
 
     await servicio.save();
 
-    res.json({ mensaje: "✅ Servicio calificado correctamente", servicio });
+    res.json({ mensaje: " Servicio calificado correctamente", servicio });
   } catch (error) {
     console.error("❌ Error calificarServicio:", error);
     res.status(500).json({ mensaje: "Error al calificar servicio" });
   }
 };
 
-// ✅ Servicios completados sin calificar
+//  Servicios completados sin calificar
 exports.obtenerServiciosPendientesDeCalificar = async (req, res) => {
   try {
     const servicios = await Servicio.find({
@@ -245,7 +245,7 @@ exports.obtenerServiciosPendientesDeCalificar = async (req, res) => {
   }
 };
 
-// ✅ Obtener calificaciones de servicios completados para el mecánico
+//  Obtener calificaciones de servicios completados para el mecánico
 exports.obtenerCalificacionesDeMecanico = async (req, res) => {
   try {
     const { mecanicoId } = req.params;
@@ -265,7 +265,7 @@ exports.obtenerCalificacionesDeMecanico = async (req, res) => {
   }
 };
 
-// ✅ Historial de servicios calificados (cliente)
+//  Historial de servicios calificados (cliente)
 exports.obtenerHistorialCliente = async (req, res) => {
   try {
     const servicios = await Servicio.find({
@@ -278,7 +278,7 @@ exports.obtenerHistorialCliente = async (req, res) => {
 
     res.json(servicios);
   } catch (error) {
-    console.error("❌ Error obtenerHistorialCliente:", error);
+    console.error(" Error obtenerHistorialCliente:", error);
     res.status(500).json({ mensaje: "Error al obtener historial" });
   }
 };
@@ -303,7 +303,7 @@ exports.subirDiagnostico = async (req, res) => {
 
     res.json({ mensaje: 'Diagnóstico guardado', diagnostico: servicio.diagnosticos[servicio.diagnosticos.length - 1], servicio });
   } catch (error) {
-    console.error('❌ Error subirDiagnostico:', error);
+    console.error(' Error subirDiagnostico:', error);
     res.status(500).json({ mensaje: 'Error al subir diagnóstico' });
   }
 };

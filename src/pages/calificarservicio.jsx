@@ -62,7 +62,7 @@ const CalificarServicio = () => {
         }
       );
       const data = await res.json();
-      alert("✅ Servicio calificado correctamente");
+      alert(" Servicio calificado correctamente");
 
       setCalificacion(0);
       setComentario("");
@@ -125,7 +125,7 @@ const CalificarServicio = () => {
                     </div>
                   ) : (
                     <p key={s._id} className="sin-pdf">
-                      ℹ️ El mecánico aún no ha subido el informe PDF.
+                       El mecánico aún no ha subido el informe PDF.
                     </p>
                   )
                 ))}

@@ -34,7 +34,7 @@ exports.obtenerCalificaciones = async (req, res) => {
   }
 };
 
-// ✅ Obtener calificaciones de los productos de una tienda
+//  Obtener calificaciones de los productos de una tienda
 exports.obtenerCalificacionesPorTienda = async (req, res) => {
   try {
     const tiendaId = req.params.tiendaId;

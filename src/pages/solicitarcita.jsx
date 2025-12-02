@@ -103,12 +103,12 @@ const SolicitarCita = () => {
 
   const manejarUbicacion = () => {
     if (!navigator.geolocation) {
-      alert("❌ Tu navegador no soporta geolocalización.");
+      alert(" Tu navegador no soporta geolocalización.");
       return;
     }
 
     setLocalizando(true);
-    console.log("🔄 Solicitando ubicación...");
+    console.log(" Solicitando ubicación...");
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -118,26 +118,26 @@ const SolicitarCita = () => {
         };
         setUbicacion(nuevaUbicacion);
         setLocalizando(false);
-        console.log("✅ Ubicación detectada:", nuevaUbicacion);
-        alert(`✅ Ubicación detectada correctamente\nLat: ${nuevaUbicacion.lat.toFixed(4)}\nLng: ${nuevaUbicacion.lng.toFixed(4)}`);
+        console.log(" Ubicación detectada:", nuevaUbicacion);
+        alert(` Ubicación detectada correctamente\nLat: ${nuevaUbicacion.lat.toFixed(4)}\nLng: ${nuevaUbicacion.lng.toFixed(4)}`);
       },
       (err) => {
         setLocalizando(false);
-        console.error("❌ Error de geolocalización:", err);
+        console.error(" Error de geolocalización:", err);
         
         let mensaje = "Error obteniendo ubicación";
         switch(err.code) {
           case err.PERMISSION_DENIED:
-            mensaje = "❌ Permiso denegado.\n\nPasos para habilitar:\n1. Haz clic en el candado 🔒 en la barra de direcciones\n2. Permite el acceso a tu ubicación\n3. Recarga la página e intenta de nuevo";
+            mensaje = " Permiso denegado.\n\nPasos para habilitar:\n1. Haz clic en el candado 🔒 en la barra de direcciones\n2. Permite el acceso a tu ubicación\n3. Recarga la página e intenta de nuevo";
             break;
           case err.POSITION_UNAVAILABLE:
-            mensaje = "❌ Ubicación no disponible.\n\nVerifica que:\n1. El GPS del dispositivo esté habilitado\n2. Estés en una zona con cobertura\n3. Intenta de nuevo en unos momentos";
+            mensaje = " Ubicación no disponible.\n\nVerifica que:\n1. El GPS del dispositivo esté habilitado\n2. Estés en una zona con cobertura\n3. Intenta de nuevo en unos momentos";
             break;
           case err.TIMEOUT:
-            mensaje = "❌ La solicitud tardó demasiado.\nIntenta de nuevo en unos segundos";
+            mensaje = " La solicitud tardó demasiado.\nIntenta de nuevo en unos segundos";
             break;
           default:
-            mensaje = `❌ Error: ${err.message}`;
+            mensaje = ` Error: ${err.message}`;
         }
         alert(mensaje);
       },
@@ -204,7 +204,7 @@ const SolicitarCita = () => {
 
       if (!res.ok) throw new Error("Error al registrar la cita");
 
-      alert(`✅ Cita solicitada con éxito.\nTotal a pagar: $${precioTotal.toLocaleString()}`);
+      alert(` Cita solicitada con éxito.\nTotal a pagar: $${precioTotal.toLocaleString()}`);
 
       setFecha("");
       setHora("");
@@ -213,7 +213,7 @@ const SolicitarCita = () => {
       setDireccion("");
       setEsDomicilio(false);
     } catch (error) {
-      alert("❌ No se pudo solicitar la cita. Intenta más tarde.");
+      alert(" No se pudo solicitar la cita. Intenta más tarde.");
       console.error("Error al solicitar cita:", error);
     }
   };
@@ -244,7 +244,7 @@ const SolicitarCita = () => {
 
         {servicioCompletado && (
           <div className="servicio-completado-box">
-            <h4>📄 Último servicio completado</h4>
+            <h4> Último servicio completado</h4>
             <p><strong>Mecánico:</strong> {servicioCompletado.mecanico?.nombre || "N/A"}</p>
             <p><strong>Fecha:</strong> {new Date(servicioCompletado.fechaCompletado).toLocaleDateString()}</p>
             <p><strong>Servicio:</strong> {servicioCompletado.nombre}</p>
@@ -255,7 +255,7 @@ const SolicitarCita = () => {
                 rel="noopener noreferrer"
                 className="btn-descargar-informe"
               >
-                📥 Descargar Informe
+                 Descargar Informe
               </a>
             )}
           </div>
@@ -315,11 +315,11 @@ const SolicitarCita = () => {
               onClick={manejarUbicacion}
               disabled={localizando}
             >
-              {localizando ? "🔄 Detectando ubicación..." : "Detectar mi ubicación 📍"}
+              {localizando ? " Detectando ubicación..." : "Detectar mi ubicación 📍"}
             </button>
             {ubicacion.lat && ubicacion.lng && (
               <div style={{ color: 'green', fontSize: '12px', marginTop: '5px' }}>
-                ✅ Ubicación detectada: {ubicacion.lat.toFixed(4)}, {ubicacion.lng.toFixed(4)}
+                 Ubicación detectada: {ubicacion.lat.toFixed(4)}, {ubicacion.lng.toFixed(4)}
               </div>
             )}
           </>

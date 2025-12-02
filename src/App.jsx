@@ -35,7 +35,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [role, setRole] = useState(null);
 
-  // ✅ Verificar sesión al cargar
+  //  Verificar sesión al cargar
   useEffect(() => {
     const token = localStorage.getItem("token");
     const storedRole = localStorage.getItem("role");
@@ -45,7 +45,7 @@ function App() {
     }
   }, []);
 
-  // ✅ Login handler
+  // Login handler
   const handleLogin = (userRole) => {
     setLoggedIn(true);
     setRole(userRole);

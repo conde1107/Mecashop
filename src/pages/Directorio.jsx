@@ -89,7 +89,7 @@ const Directorio = () => {
     <div className="directorio-container">
       <h1>Directorio</h1>
 
-      {/* 🔍 Búsqueda y rol */}
+      {/*  Búsqueda y rol */}
       <div className="busqueda-container">
         <input
           type="text"

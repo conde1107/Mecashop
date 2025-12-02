@@ -7,8 +7,8 @@ const Notificacion = require('../models/notificacion');
 // POST: Enviar solicitud de acceso
 router.post('/', async (req, res) => {
   try {
-    console.log('📩 Solicitud de acceso recibida:', req.body);
-    console.log('🔑 Password recibido:', req.body.password);
+    console.log(' Solicitud de acceso recibida:', req.body);
+    console.log(' Password recibido:', req.body.password);
     const { nombre, correo, telefono, password, tipoUsuario, mensaje } = req.body;
 
     // Validar datos
@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     const admins = await Usuario.find({ rol: 'admin' });
     
     if (admins.length === 0) {
-      console.log('⚠️ No se encontraron administradores en el sistema');
+      console.log(' No se encontraron administradores en el sistema');
       return res.status(500).json({ msg: 'No hay administradores disponibles' });
     }
 
@@ -39,13 +39,13 @@ router.post('/', async (req, res) => {
       mensajeNotificacion += `\nMensaje: ${mensaje}`;
     }
 
-    console.log('📝 Mensaje de notificación creado:');
+    console.log(' Mensaje de notificación creado:');
     console.log(mensajeNotificacion);
-    console.log('📏 Longitud del mensaje:', mensajeNotificacion.length);
-    console.log('🔑 Password en el mensaje:', mensajeNotificacion.includes(password) ? 'SÍ' : 'NO');
+    console.log(' Longitud del mensaje:', mensajeNotificacion.length);
+    console.log(' Password en el mensaje:', mensajeNotificacion.includes(password) ? 'SÍ' : 'NO');
 
     // Crear notificación para cada admin
-    console.log(`📧 Creando notificaciones para ${admins.length} administrador(es)...`);
+    console.log(` Creando notificaciones para ${admins.length} administrador(es)...`);
     
     for (const admin of admins) {
       const notifCreada = await Notificacion.crear(
@@ -55,10 +55,10 @@ router.post('/', async (req, res) => {
         'solicitud',
         null
       );
-      console.log('✅ Notificación guardada en DB:', notifCreada);
+      console.log(' Notificación guardada en DB:', notifCreada);
     }
 
-    console.log('✅ Notificaciones creadas exitosamente');
+    console.log(' Notificaciones creadas exitosamente');
 
     res.status(200).json({ 
       msg: 'Solicitud enviada correctamente. El administrador se pondrá en contacto contigo pronto.' 

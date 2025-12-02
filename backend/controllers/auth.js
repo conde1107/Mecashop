@@ -252,13 +252,13 @@ exports.forgotPassword = async (req, res) => {
     await transporter.sendMail({
       from: `"Soporte Mecashop" <${process.env.EMAIL_USER}>`,
       to: correo,
-      subject: '🔐 Recuperación de contraseña - Mecashop',
+      subject: ' Recuperación de contraseña - Mecashop',
       html,
     });
 
     res.json({ msg: 'Correo enviado. Revisa tu bandeja de entrada.' });
   } catch (error) {
-    console.error('❌ Error en forgotPassword:', error);
+    console.error(' Error en forgotPassword:', error);
     res.status(500).json({ msg: 'Error enviando el correo.' });
   }
 };
@@ -282,7 +282,7 @@ exports.resetPassword = async (req, res) => {
       return res.status(400).json({ msg: 'La contraseña debe tener al menos 8 caracteres.' });
     }
 
-    // 🔥 Hash de la nueva contraseña
+    //  Hash de la nueva contraseña
     const bcrypt = require('bcryptjs');
     const salt = await bcrypt.genSalt(10);
     usuario.password = await bcrypt.hash(newPassword, salt);

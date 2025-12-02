@@ -1,7 +1,7 @@
 // backend/controllers/producto.js
 import mongoose from "mongoose";
 import Producto from "../models/producto.js";
-import cloudinary from "../config/Cloudinary.js"; // ✅ Asegúrate de tener Cloudinary configurado
+import cloudinary from "../config/Cloudinary.js"; 
 
 // =====================
 // Crear producto
@@ -41,7 +41,7 @@ export const crearProducto = async (req, res) => {
     res.status(201).json(productoGuardado);
 
   } catch (error) {
-    console.error('❌ Error al guardar el producto:', error);
+    console.error(' Error al guardar el producto:', error);
     res.status(500).json({ error: 'Error al guardar el producto' });
   }
 };
@@ -54,7 +54,7 @@ export const obtenerProductos = async (req, res) => {
     const productos = await Producto.find().sort({ createdAt: -1 });
     res.json(productos);
   } catch (error) {
-    console.error('❌ Error al obtener productos:', error);
+    console.error(' Error al obtener productos:', error);
     res.status(500).json({ error: 'Error al obtener productos' });
   }
 };
@@ -144,7 +144,7 @@ export const eliminarProducto = async (req, res) => {
 
     res.json({ mensaje: 'Producto eliminado correctamente' });
   } catch (error) {
-    console.error('❌ Error al eliminar producto:', error);
+    console.error(' Error al eliminar producto:', error);
     res.status(500).json({ error: 'Error al eliminar producto' });
   }
 };

@@ -21,7 +21,7 @@ const ProductoDetalle = () => {
 
   const token = localStorage.getItem("token");
 
-  // ✅ Cargar producto y calificaciones
+  //  Cargar producto y calificaciones
   useEffect(() => {
     const fetchProducto = async () => {
       try {
@@ -47,7 +47,7 @@ const ProductoDetalle = () => {
     fetchCalificaciones();
   }, [id]);
 
-  // ✅ Agregar al carrito
+  //  Agregar al carrito
   const agregarAlCarrito = () => {
     if (!token) {
       alert("Debes iniciar sesión primero para agregar productos al carrito");
@@ -78,14 +78,14 @@ const ProductoDetalle = () => {
 
       localStorage.setItem("carrito", JSON.stringify(carrito));
       console.log("Carrito actual:", carrito);
-      alert("Producto agregado al carrito ✅");
+      alert("Producto agregado al carrito ");
     } catch (error) {
       console.error("Error al agregar al carrito:", error);
       alert("Error inesperado al agregar producto al carrito.");
     }
   };
 
-  // ✅ Enviar calificación
+  //  Enviar calificación
   const enviarCalificacion = async () => {
     if (!estrella) return alert("Selecciona una calificación");
     if (!token) return alert("Debes estar logueado para calificar");

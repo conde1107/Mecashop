@@ -11,7 +11,7 @@ exports.obtenerMecanicos = async (req, res) => {
   try {
     const mecanicos = await Usuario.find({ rol: 'mecanico' })
       .select('nombre correo especialidad imagen disponible telefono horario descripcion');
-    if (!mecanicos.length) return res.status(200).json({ mensaje: "📭 No hay mecánicos registrados aún" });
+    if (!mecanicos.length) return res.status(200).json({ mensaje: " No hay mecánicos registrados aún" });
     res.status(200).json(mecanicos);
   } catch (error) {
     res.status(500).json({ mensaje: '❌ Error al obtener mecánicos', error: error.message });

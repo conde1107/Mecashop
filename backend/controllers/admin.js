@@ -1,6 +1,6 @@
 const Usuario = require("../models/usuario");
 
-// ✅ Obtener todos los usuarios
+//  Obtener todos los usuarios
 exports.obtenerUsuarios = async (req, res) => {
   try {
     const usuarios = await Usuario.find();
@@ -10,7 +10,7 @@ exports.obtenerUsuarios = async (req, res) => {
   }
 };
 
-// ✅ Cambiar rol de un usuario
+//  Cambiar rol de un usuario
 exports.cambiarRol = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndUpdate(
@@ -28,7 +28,7 @@ exports.cambiarRol = async (req, res) => {
   }
 };
 
-// ✅ Desactivar usuario (versión antigua, ya no la usas)
+//  Desactivar usuario (versión antigua, ya no la usas)
 exports.desactivarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndUpdate(
@@ -46,7 +46,7 @@ exports.desactivarUsuario = async (req, res) => {
   }
 };
 
-// ✅ Activar / Desactivar usuario (esta es la correcta)
+//  Activar / Desactivar usuario (esta es la correcta)
 exports.cambiarEstado = async (req, res) => {
   try {
     const { activo } = req.body;
@@ -72,7 +72,7 @@ exports.cambiarEstado = async (req, res) => {
   }
 };
 
-// ✅ Eliminar usuario (FALTABA — CAUSABA EL ERROR)
+// Eliminar usuario (FALTABA — CAUSABA EL ERROR)
 exports.eliminarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByIdAndDelete(req.params.id);
@@ -88,7 +88,7 @@ exports.eliminarUsuario = async (req, res) => {
   }
 };
 
-// ✅ Actualizar información de un usuario (solo admin)
+// Actualizar información de un usuario (solo admin)
 exports.actualizarUsuario = async (req, res) => {
   try {
     const userId = req.params.id;

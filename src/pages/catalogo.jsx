@@ -166,7 +166,7 @@ const Catalogo = () => {
 
       const nuevoProducto = await res.json();
       setProductos([nuevoProducto, ...productos]);
-      toast.success('✅ Producto agregado correctamente');
+      toast.success(' Producto agregado correctamente');
       setProducto({ nombre: '', descripcion: '', precio: '', inventario: '', imagen: null });
       setPreviewImagen(null);
       setMostrarFormulario(false);
@@ -184,7 +184,7 @@ const Catalogo = () => {
     agotados: productos.filter(p => p.inventario === 0).length,
   };
 
-  // ✅ Abrir modal de edición
+  //  Abrir modal de edición
   const abrirEdicion = (prod) => {
     setEditandoId(prod._id);
     setProductoEditando({
@@ -197,7 +197,7 @@ const Catalogo = () => {
     setPreviewImagenEditar(prod.imagenURL ? `${API_BASE}${prod.imagenURL}` : null);
   };
 
-  // ✅ Cancelar edición
+  //  Cancelar edición
   const cancelarEdicion = () => {
     setEditandoId(null);
     setProductoEditando({
@@ -210,7 +210,7 @@ const Catalogo = () => {
     setPreviewImagenEditar(null);
   };
 
-  // ✅ Manejar cambios en el formulario de edición
+  //  Manejar cambios en el formulario de edición
   const handleChangeEditar = (e) => {
     const { name, value, files } = e.target;
 
@@ -229,7 +229,7 @@ const Catalogo = () => {
     }
   };
 
-  // ✅ Guardar edición
+  //  Guardar edición
   const handleGuardarEdicion = async (e) => {
     e.preventDefault();
 
@@ -255,7 +255,7 @@ const Catalogo = () => {
       formData.append('inventario', productoEditando.inventario);
       if (productoEditando.imagen) formData.append('imagen', productoEditando.imagen);
 
-      console.log('📤 Enviando actualización del producto...');
+      console.log(' Enviando actualización del producto...');
 
       const res = await fetch(`${API_URL}/${editandoId}`, {
         method: 'PUT',
@@ -265,7 +265,7 @@ const Catalogo = () => {
         body: formData,
       });
 
-      console.log('📥 Respuesta del servidor:', res.status);
+      console.log(' Respuesta del servidor:', res.status);
 
       // Primero clonamos la respuesta para poder leerla dos veces si es necesario
       let productoActualizado;
@@ -284,7 +284,7 @@ const Catalogo = () => {
 
       productoActualizado = await res.json();
       setProductos(productos.map(p => p._id === editandoId ? productoActualizado : p));
-      toast.success('✅ Producto actualizado correctamente');
+      toast.success(' Producto actualizado correctamente');
       cancelarEdicion();
     } catch (error) {
       console.error('Error al actualizar producto:', error);
@@ -294,7 +294,7 @@ const Catalogo = () => {
     }
   };
 
-  // ✅ Eliminar producto
+  //  Eliminar producto
   const handleEliminar = async (productoId) => {
     if (!window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
       return;
@@ -314,7 +314,7 @@ const Catalogo = () => {
       }
 
       setProductos(productos.filter(p => p._id !== productoId));
-      toast.success('✅ Producto eliminado correctamente');
+      toast.success(' Producto eliminado correctamente');
     } catch (error) {
       console.error('Error al eliminar producto:', error);
       toast.error(`❌ ${error.message || 'Error al eliminar el producto'}`);
@@ -421,7 +421,7 @@ const Catalogo = () => {
                       id="imagen-input"
                     />
                     <label htmlFor="imagen-input" className="file-label">
-                      <span>📤 Seleccionar Imagen</span>
+                      <span> Seleccionar Imagen</span>
                     </label>
                   </div>
 
@@ -521,7 +521,7 @@ const Catalogo = () => {
                     id="imagen-input-editar"
                   />
                   <label htmlFor="imagen-input-editar" className="file-label">
-                    <span>📤 Seleccionar Imagen</span>
+                    <span> Seleccionar Imagen</span>
                   </label>
                 </div>
 
@@ -583,7 +583,7 @@ const Catalogo = () => {
         <div className="search-box">
           <input 
             type="text"
-            placeholder="🔍 Buscar producto..."
+            placeholder=" Buscar producto..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -623,7 +623,7 @@ const Catalogo = () => {
           </div>
         ) : productosFiltrados.length === 0 ? (
           <div className="empty-state">
-            <p>📭 No hay productos disponibles</p>
+            <p> No hay productos disponibles</p>
             {searchTerm && <p>Intenta con otra búsqueda</p>}
           </div>
         ) : (

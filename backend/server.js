@@ -10,7 +10,7 @@ let iniciarCronjobs = () => {}; // Default empty function
 try {
   iniciarCronjobs = require('./utils/cronJobs').iniciarCronjobs;
 } catch (err) {
-  console.error("⚠️ Error cargando cronJobs:", err.message);
+  console.error(" Error cargando cronJobs:", err.message);
 }
 
 const app = express();
@@ -103,7 +103,7 @@ app.use((req, res, next) => {
 
 // ------------------- RUTA PRINCIPAL -------------------
 app.get('/', (req, res) => {
-  res.send('✅ Backend activo y funcionando correctamente');
+  res.send(' Backend activo y funcionando correctamente');
 });
 
 
@@ -158,20 +158,20 @@ app.use((err, req, res, next) => {
 // ------------------- CONEXIÓN A MONGO -------------------
 mongoose.connect(MONGODB_URI)
   .then(() => {
-    console.log('✅ Conectado a MongoDB');
+    console.log(' Conectado a MongoDB');
     
     // Iniciar servicios programados (cron jobs)
     iniciarCronjobs();
     
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+      console.log(`Servidor corriendo en http://localhost:${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('❌ Error conectando a MongoDB:', error.message);
-    console.log('⚠️ Iniciando servidor sin conexión a MongoDB (modo degradado).');
+    console.error(' Error conectando a MongoDB:', error.message);
+    console.log(' Iniciando servidor sin conexión a MongoDB (modo degradado).');
     // In degraded mode we still start the server so PaaS (Render) sees a running process.
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Servidor corriendo en modo degradado en http://localhost:${PORT}`);
+      console.log(` Servidor corriendo en modo degradado en http://localhost:${PORT}`);
     });
   });

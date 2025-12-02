@@ -35,7 +35,7 @@ export default function Carrito() {
 
   const total = carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
 
-  // 💳 INTEGRACIÓN WOMPI
+  //  INTEGRACIÓN WOMPI
   const handlePagarConWompi = async () => {
     try {
       setLoading(true);
@@ -47,7 +47,7 @@ export default function Carrito() {
         return;
       }
 
-      // 🔍 VALIDAR STOCK ANTES DE PAGAR
+      //  VALIDAR STOCK ANTES DE PAGAR
       const carritoConIds = carrito.map(item => ({
         productoId: item.id,
         nombre: item.nombre,
@@ -79,7 +79,7 @@ export default function Carrito() {
         return;
       }
 
-      // ✅ Stock validado, proceder con pago
+      //  Stock validado, proceder con pago
       const itemsEncoded = encodeURIComponent(JSON.stringify(carritoConIds));
       const totalEnCentavos = Math.round(total * 100);
 
@@ -163,7 +163,7 @@ export default function Carrito() {
       </div>
 
       <div className="carrito-total">
-        {/* 🆕 BOTÓN WOMPI */}
+        {/*  BOTÓN WOMPI */}
         <button 
           className="btn-finalizar" 
           onClick={handlePagarConWompi}

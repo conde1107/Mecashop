@@ -109,7 +109,7 @@ export default function PagoExitoso() {
             <span className="detail-value">{estadoPago.reference}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">💵 Monto pagado:</span>
+            <span className="detail-label"> Monto pagado:</span>
             <span className="detail-value highlight">
               ${(estadoPago.amountInCents / 100).toLocaleString("es-CO", {
                 minimumFractionDigits: 2,
@@ -118,11 +118,11 @@ export default function PagoExitoso() {
             </span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">💳 Método:</span>
+            <span className="detail-label"> Método:</span>
             <span className="detail-value">{estadoPago.metodoPago || "Tarjeta"}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">🔔 Estado:</span>
+            <span className="detail-label"> Estado:</span>
             <span className={`detail-value status-badge ${isPagado ? "approved" : "pending"}`}>
               {isPagado ? "Aprobado ✓" : "Procesando..."}
             </span>

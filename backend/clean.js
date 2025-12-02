@@ -12,7 +12,7 @@ async function cleanPaths() {
       [{ $set: { informe: { $replaceAll: { input: '$informe', find: '/informes', replacement: '' } } } }]
     );
     
-    console.log(`✅ Actualizado: ${result.modifiedCount} servicios`);
+    console.log(` Actualizado: ${result.modifiedCount} servicios`);
     process.exit(0);
   } catch (error) {
     console.error('Error:', error.message);

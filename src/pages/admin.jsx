@@ -19,7 +19,7 @@ const Admin = () => {
 
   const navigate = useNavigate();
 
-  // 🧩 Cargar usuarios al montar
+  //  Cargar usuarios al montar
   useEffect(() => {
     cargarUsuarios();
   }, []);

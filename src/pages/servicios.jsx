@@ -8,7 +8,7 @@ const ServiciosMecanico = () => {
   const token = localStorage.getItem("token");
   const mecanicoId = localStorage.getItem("userId");
 
-  // ✅ Obtener servicios del mecánico y agrupar por solicitud
+  // Obtener servicios del mecánico y agrupar por solicitud
   const fetchServicios = async () => {
     try {
       const res = await fetch(`http://localhost:3000/api/servicios/mecanico/${mecanicoId}`, {
@@ -40,7 +40,7 @@ const ServiciosMecanico = () => {
     fetchServicios();
   }, []);
 
-  // ✅ Subir informe PDF individual
+  //  Subir informe PDF individual
   const subirInforme = async (id, archivo) => {
     if (!archivo) return alert("Selecciona un PDF primero");
 
@@ -70,7 +70,7 @@ const ServiciosMecanico = () => {
     }
   };
 
-  // ✅ Marcar servicio como completado
+  //  Marcar servicio como completado
   const completarServicio = async (id) => {
     try {
       const res = await fetch(`http://localhost:3000/api/servicios/${id}/completar`, {
@@ -85,7 +85,7 @@ const ServiciosMecanico = () => {
     }
   };
 
-  // ✅ Completar todos los servicios de una solicitud
+  //  Completar todos los servicios de una solicitud
   const completarTodos = async (solicitud) => {
     for (const serv of solicitud.servicios) {
       await completarServicio(serv._id);

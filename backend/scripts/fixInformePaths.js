@@ -5,20 +5,20 @@ require('dotenv').config();
 
 const fixInformePaths = async () => {
   try {
-    console.log('🔄 Conectando a MongoDB...');
+    console.log(' Conectando a MongoDB...');
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mecashop');
-    console.log('✅ Conectado a MongoDB');
+    console.log(' Conectado a MongoDB');
 
     // Buscar todos los servicios con informe
     const servicios = await Servicio.find({ informe: { $ne: null } });
-    console.log(`📊 Encontrados ${servicios.length} servicios con informe`);
+    console.log(` Encontrados ${servicios.length} servicios con informe`);
 
     let actualizados = 0;
 
     for (const servicio of servicios) {
       // Si ya tiene el prefijo 'uploads/', no hacer nada
       if (servicio.informe.startsWith('uploads/')) {
-        console.log(`✅ ${servicio._id}: Ya tiene ruta correcta (${servicio.informe})`);
+        console.log(` ${servicio._id}: Ya tiene ruta correcta (${servicio.informe})`);
         continue;
       }
 
@@ -27,15 +27,15 @@ const fixInformePaths = async () => {
       const rutaNueva = `uploads/${rutaAntigua}`;
 
       await Servicio.findByIdAndUpdate(servicio._id, { informe: rutaNueva });
-      console.log(`✏️ ${servicio._id}: ${rutaAntigua} → ${rutaNueva}`);
+      console.log(` ${servicio._id}: ${rutaAntigua} → ${rutaNueva}`);
       actualizados++;
     }
 
-    console.log(`\n✅ Actualización completada: ${actualizados} servicios corregidos`);
+    console.log(`\n Actualización completada: ${actualizados} servicios corregidos`);
     await mongoose.connection.close();
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error(' Error:', error);
     process.exit(1);
   }
 };

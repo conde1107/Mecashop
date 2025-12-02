@@ -44,7 +44,7 @@ const MecanicotiendaTienda = () => {
 
         const mecanicosData = Array.isArray(data) ? data : data.mecanicos || [];
 
-        // 🔥 FIX: Asegurar que "disponible" siempre exista
+        //   Asegurar que "disponible" siempre exista
         setMecanicos(
           mecanicosData.map(m => ({
             ...m,
@@ -193,7 +193,7 @@ const MecanicotiendaTienda = () => {
     }
   };
 
-  // 🔥 FILTROS FUNCIONANDO AL 100%
+  //  FILTROS 
   const mecanicosFiltrados = mecanicos.filter(m => {
     if (filtro === 'disponibles') return m.disponible === true;
     if (filtro === 'ocupados') return m.disponible === false;
@@ -206,14 +206,14 @@ const MecanicotiendaTienda = () => {
 
       <div className="mecanicos-header">
         <div className="header-content">
-          <h1>👨‍🔧 Mis Mecánicos</h1>
+          <h1> Mis Mecánicos</h1>
           <p>Gestiona los mecánicos registrados en tu tienda</p>
         </div>
         <button 
           className="btn-agregar"
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
         >
-          {mostrarFormulario ? '✕ Cancelar' : '➕ Registrar Mecánico'}
+          {mostrarFormulario ? '✕ Cancelar' : ' Registrar Mecánico'}
         </button>
       </div>
 
@@ -279,7 +279,7 @@ const MecanicotiendaTienda = () => {
                   <div className="file-input-wrapper">
                     <input type="file" accept=".pdf" onChange={handleArchivoPDF} required />
                     <label className="file-label">
-                      {archivoPDF ? `📄 ${archivoPDF.name}` : '📄 Selecciona un PDF'}
+                      {archivoPDF ? ` ${archivoPDF.name}` : '📄 Selecciona un PDF'}
                     </label>
                   </div>
                 </div>
@@ -295,7 +295,7 @@ const MecanicotiendaTienda = () => {
             </div>
 
             <button type="submit" className="btn-submit" disabled={guardando}>
-              {guardando ? 'Registrando...' : '✅ Registrar'}
+              {guardando ? 'Registrando...' : ' Registrar'}
             </button>
           </form>
         </div>
@@ -366,11 +366,11 @@ const MecanicotiendaTienda = () => {
                     className={`btn-disponibilidad ${mecanico.disponible ? 'ocupar' : 'liberar'}`}
                     onClick={() => handleToggleDisponibilidad(mecanico._id, mecanico.disponible)}
                   >
-                    {mecanico.disponible ? '⏸️ Pausar' : '▶️ Reactivar'}
+                    {mecanico.disponible ? 'Pausar' : ' Reactivar'}
                   </button>
 
                   <button className="btn-eliminar" onClick={() => handleEliminar(mecanico._id)}>
-                    🗑️ Eliminar
+                     Eliminar
                   </button>
                 </div>
 

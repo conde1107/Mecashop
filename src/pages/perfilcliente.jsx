@@ -292,7 +292,7 @@ export default function PerfilCliente() {
                           placeholder="Tu zona de cobertura"
                         />
                         <button type="button" className="btn-detectar" onClick={detectarUbicacion}>
-                          📍 Detectar
+                           Detectar
                         </button>
                       </div>
                     </div>

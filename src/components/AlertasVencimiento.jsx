@@ -56,7 +56,7 @@ const AlertasVencimiento = ({ usuarioId, token }) => {
   return (
     <div className="alertas-vencimiento-container">
       <div className="alertas-header">
-        <h3>⚠️ Documentos por Vencer</h3>
+        <h3> Documentos por Vencer</h3>
         <button 
           className="btn-cerrar-alertas"
           onClick={() => setMostrarAlertas(false)}

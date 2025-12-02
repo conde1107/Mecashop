@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// ✅ Subesquema para los servicios seleccionados
+//  Subesquema para los servicios seleccionados
 const ServicioItemSchema = new mongoose.Schema({
   nombreServicio: { type: String, required: true },
   precio: { type: Number, required: true, default: 0 },
@@ -11,7 +11,7 @@ const SolicitudSchema = new mongoose.Schema({
   mecanicoId: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", required: true },
   vehiculoId: { type: mongoose.Schema.Types.ObjectId, ref: "Vehiculo", required: true },
 
-  // ✅ Array de servicios seleccionados
+  // Array de servicios seleccionados
   servicios: {
     type: [ServicioItemSchema],
     required: true,

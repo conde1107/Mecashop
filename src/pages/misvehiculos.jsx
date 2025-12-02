@@ -51,12 +51,12 @@ export default function MisVehiculos() {
     try {
       const res = await fetch(`${API_URL}/vehiculo`, { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
-      console.log("✅ Vehículos cargados:", data);
+      console.log(" Vehículos cargados:", data);
       if (res.ok) {
         setVehiculos(data);
         // Cargar servicios y mantenimientos completados para cada vehículo
         data.forEach(v => {
-          console.log(`📍 Vehículo ID: ${v._id}, Marca: ${v.marca}, Modelo: ${v.modelo}`);
+          console.log(` Vehículo ID: ${v._id}, Marca: ${v.marca}, Modelo: ${v.modelo}`);
           cargarServiciosPorVehiculo(v._id);
           cargarMantenimientosPorVehiculo(v._id);
         });
@@ -83,7 +83,7 @@ export default function MisVehiculos() {
       }
       
       const data = await res.json();
-      console.log(`📦 Servicios cargados para vehículo ${vehiculoId}:`, data);
+      console.log(` Servicios cargados para vehículo ${vehiculoId}:`, data);
       
       if (Array.isArray(data) && data.length > 0) {
         setServiciosPorVehiculo(prev => ({
@@ -91,28 +91,28 @@ export default function MisVehiculos() {
           [vehiculoId]: data
         }));
       } else {
-        console.log(`ℹ️ Sin servicios completados para vehículo ${vehiculoId}`);
+        console.log(` Sin servicios completados para vehículo ${vehiculoId}`);
       }
     } catch (err) {
-      console.error("❌ Error cargando servicios:", err);
+      console.error(" Error cargando servicios:", err);
     }
   };
 
   // Cargar mantenimientos de un vehículo
   const cargarMantenimientosPorVehiculo = async (vehiculoId) => {
     try {
-      console.log(`🔧 Cargando mantenimientos para vehículo: ${vehiculoId}`);
+      console.log(` Cargando mantenimientos para vehículo: ${vehiculoId}`);
       const res = await fetch(`${API_URL}/mantenimiento/vehiculo/${vehiculoId}`, { 
         headers: { Authorization: `Bearer ${token}` } 
       });
       
       if (!res.ok) {
-        console.error(`❌ Error ${res.status}: ${res.statusText}`);
+        console.error(` Error ${res.status}: ${res.statusText}`);
         return;
       }
       
       const data = await res.json();
-      console.log(`📋 Mantenimientos cargados para vehículo ${vehiculoId}:`, data);
+      console.log(` Mantenimientos cargados para vehículo ${vehiculoId}:`, data);
       
       if (Array.isArray(data) && data.length > 0) {
         setMantenimientosPorVehiculo(prev => ({
@@ -120,10 +120,10 @@ export default function MisVehiculos() {
           [vehiculoId]: data
         }));
       } else {
-        console.log(`ℹ️ Sin mantenimientos para vehículo ${vehiculoId}`);
+        console.log(` Sin mantenimientos para vehículo ${vehiculoId}`);
       }
     } catch (err) {
-      console.error("❌ Error cargando mantenimientos:", err);
+      console.error(" Error cargando mantenimientos:", err);
     }
   };
 
@@ -291,7 +291,7 @@ export default function MisVehiculos() {
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("✅ Vehículo actualizado correctamente");
+        toast.success(" Vehículo actualizado correctamente");
         setKmModalOpen(false);
         cargarVehiculos();
       } else toast.error(data.error || "No se pudo actualizar");
@@ -576,7 +576,7 @@ export default function MisVehiculos() {
 
     <Modal open={kmModalOpen} title="Actualizar Vehículo" onClose={() => setKmModalOpen(false)}>
       <div className="modal-body">
-        <label>⛽ Kilometraje (Opcional)</label>
+        <label>Kilometraje (Opcional)</label>
         <input
           type="number"
           value={formKm.nuevoKilometraje}
@@ -592,7 +592,7 @@ export default function MisVehiculos() {
           placeholder="Ej: Rojo, Negro, Plateado"
         />
 
-        <label>⛽ Combustible (Opcional)</label>
+        <label> Combustible (Opcional)</label>
         <select
           value={formKm.combustible}
           onChange={(e) => setFormKm({ ...formKm, combustible: e.target.value })}
@@ -605,7 +605,7 @@ export default function MisVehiculos() {
           <option value="Eléctrico">Eléctrico</option>
         </select>
 
-        <label>🛢️ Tipo de Aceite (Opcional)</label>
+        <label> Tipo de Aceite (Opcional)</label>
         <select
           value={formKm.tipoAceite}
           onChange={(e) => setFormKm({ ...formKm, tipoAceite: e.target.value })}
@@ -616,7 +616,7 @@ export default function MisVehiculos() {
           <option value="sintético">Sintético</option>
         </select>
 
-        <label>🚦 Uso Especial (Opcional)</label>
+        <label> Uso Especial (Opcional)</label>
         <select
           value={formKm.usoEspecial}
           onChange={(e) => setFormKm({ ...formKm, usoEspecial: e.target.value })}
@@ -695,7 +695,7 @@ export default function MisVehiculos() {
                               className="btn-ver-pdf-mant"
                               title="Ver informe"
                             >
-                              👁️ Ver PDF
+                               Ver PDF
                             </a>
                             <a
                               href={pdfUrl}
@@ -703,7 +703,7 @@ export default function MisVehiculos() {
                               className="btn-descargar-pdf-mant"
                               title="Descargar informe"
                             >
-                              📥 Descargar
+                               Descargar
                             </a>
                           </>
                         );
@@ -747,7 +747,7 @@ export default function MisVehiculos() {
                             className="btn-ver-pdf-mant"
                             title="Ver informe"
                           >
-                            👁️ Ver PDF
+                             Ver PDF
                           </a>
                           <a
                             href={pdfUrl}
@@ -755,7 +755,7 @@ export default function MisVehiculos() {
                             className="btn-descargar-pdf-mant"
                             title="Descargar informe"
                           >
-                            📥 Descargar
+                             Descargar
                           </a>
                         </>
                       );

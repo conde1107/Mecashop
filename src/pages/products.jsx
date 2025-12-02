@@ -84,7 +84,7 @@ export default function Products() {
 
   return (
     <div className="products-container">
-      {/* 📱 Alertas de vencimiento de documentos - DESHABILITADO, se muestra en el panel de notificaciones */}
+      {/*  Alertas de vencimiento de documentos - DESHABILITADO, se muestra en el panel de notificaciones */}
       {/* {isLoggedIn && (
         <AlertasVencimiento 
           usuarioId={localStorage.getItem("userId")} 

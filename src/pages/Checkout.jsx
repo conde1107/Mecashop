@@ -33,7 +33,7 @@ export default function Checkout() {
   const subtotalPesos = (subtotalCentavos / 100).toFixed(2);
 
   useEffect(() => {
-    console.log("✅ Checkout cargado");
+    console.log(" Checkout cargado");
     console.log("Items:", items);
     console.log("Subtotal:", subtotalPesos);
   }, []);
@@ -129,7 +129,7 @@ export default function Checkout() {
 
       // Validar que tenemos las claves de Wompi
       if (!pagoData.publicKey || pagoData.publicKey.includes("xxx")) {
-        setError("⚠️ Claves de Wompi no configuradas. Contacta al administrador.");
+        setError(" Claves de Wompi no configuradas. Contacta al administrador.");
         setProcesando(false);
         return;
       }
@@ -146,7 +146,7 @@ export default function Checkout() {
           });
 
           checkout.open((transactionId) => {
-            console.log("✅ Transacción completada:", transactionId);
+            console.log(" Transacción completada:", transactionId);
             navigate(`/pago-exitoso?reference=${pagoData.reference}`);
           });
         } catch (checkoutError) {
@@ -200,7 +200,7 @@ export default function Checkout() {
 
         {/* DETALLES DE PRODUCTOS */}
         <div className="order-summary">
-          <h2 className="section-title">📦 Productos</h2>
+          <h2 className="section-title"> Productos</h2>
           <div className="items-list">
             {items.length > 0 ? (
               items.map((item, index) => (
@@ -250,7 +250,7 @@ export default function Checkout() {
           {/* FORMULARIO DINÁMICO POR MÉTODO DE PAGO */}
           {metodoPago && (
             <div className="payment-form">
-              {/* 💳 TARJETA DE CRÉDITO/DÉBITO */}
+              {/*  TARJETA DE CRÉDITO/DÉBITO */}
               {metodoPago === "tarjeta" && (
                 <div className="form-section">
                   <h3>Información de la Tarjeta</h3>
@@ -302,7 +302,7 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* 🏦 TRANSFERENCIA BANCARIA */}
+              {/*  TRANSFERENCIA BANCARIA */}
               {metodoPago === "transferencia" && (
                 <div className="form-section">
                   <h3>Información Bancaria</h3>
@@ -366,7 +366,7 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* 📱 BILLETERA DIGITAL */}
+              {/*  BILLETERA DIGITAL */}
               {metodoPago === "wallet" && (
                 <div className="form-section">
                   <h3>Información de Billetera Digital</h3>
@@ -427,7 +427,7 @@ export default function Checkout() {
           </button>
         </div>
 
-        <p className="secure-badge">🔒 Transacción segura con Wompi</p>
+        <p className="secure-badge"> Transacción segura con Wompi</p>
       </div>
     </div>
   );

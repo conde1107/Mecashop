@@ -15,13 +15,13 @@ const vehiculoSchema = new mongoose.Schema({
   usoEspecial: { type: String, enum: ["normal", "ciudad_trancones", "carretera"], default: "normal" },
   imagen: { type: String },
   createdAt: { type: Date, default: Date.now },
-  // 📄 Campos añadidos para documentos
+  //  Campos añadidos para documentos
   soat: { type: String, default: "" },
   tecnomecanica: { type: String, default: "" },
-  // 📅 Fechas de compra/pago
+  //  Fechas de compra/pago
   fechaCompraSoat: { type: Date, default: null },
   fechaCompraTeconomecanica: { type: Date, default: null },
-  // 🔧 Último mantenimiento
+  //  Último mantenimiento
   ultimoCambioAceite: { type: Date, default: null },
   ultimoKmCambioAceite: { type: Number, default: 0 },
   ultimoMantenimientoPreventivo: { type: Date, default: null },

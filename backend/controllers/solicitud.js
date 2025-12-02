@@ -4,7 +4,7 @@ const Servicio = require("../models/servicio");
 const { crearNotificacion } = require("../utils/notificacionUtils");
 
 // =====================================================================
-// ✅ Crear solicitud (con múltiples servicios)
+//  Crear solicitud (con múltiples servicios)
 // =====================================================================
 exports.crearSolicitud = async (req, res) => {
   try {
@@ -40,23 +40,23 @@ exports.crearSolicitud = async (req, res) => {
 
     await nuevaSolicitud.save();
 
-    // 📬 Notificar al mecánico sobre la nueva solicitud
+    //  Notificar al mecánico sobre la nueva solicitud
     try {
-      console.log('🔍 Debug crear solicitud:', {
+      console.log(' Debug crear solicitud:', {
         mecanicoId: nuevaSolicitud.mecanicoId,
         servicios: serviciosNormalizados
       });
       
       await crearNotificacion(
         nuevaSolicitud.mecanicoId,
-        "📋 Nueva Solicitud de Cita",
+        " Nueva Solicitud de Cita",
         `Nuevo cliente ha solicitado una cita para los servicios: ${serviciosNormalizados.map(s => s.nombreServicio).join(", ")}`,
         "solicitud",
         nuevaSolicitud._id
       );
-      console.log('✅ Notificación de nueva solicitud enviada');
+      console.log(' Notificación de nueva solicitud enviada');
     } catch (err) {
-      console.error("❌ Error al enviar notificación de nueva solicitud:", err);
+      console.error(" Error al enviar notificación de nueva solicitud:", err);
     }
 
     res.status(201).json({
@@ -64,7 +64,7 @@ exports.crearSolicitud = async (req, res) => {
       solicitud: nuevaSolicitud,
     });
   } catch (error) {
-    console.error("❌ Error al crear solicitud:", error);
+    console.error(" Error al crear solicitud:", error);
     res.status(500).json({
       mensaje: "Error al crear solicitud",
       error: error.message,
@@ -73,7 +73,7 @@ exports.crearSolicitud = async (req, res) => {
 };
 
 // =====================================================================
-// ✅ Obtener todas las solicitudes
+//  Obtener todas las solicitudes
 // =====================================================================
 exports.obtenerSolicitudes = async (req, res) => {
   try {
@@ -90,7 +90,7 @@ exports.obtenerSolicitudes = async (req, res) => {
 };
 
 // =====================================================================
-// ✅ Aceptar cita
+//  Aceptar cita
 // =====================================================================
 exports.aceptarCita = async (req, res) => {
   try {
@@ -114,7 +114,7 @@ exports.aceptarCita = async (req, res) => {
 
     solicitud.estado = "aceptada";
     if (!solicitud.vehiculoId) {
-      console.warn(`⚠️ aceptarCita: solicitud ${solicitud._id} no tiene vehiculoId. Saltando validación al guardar.`);
+      console.warn(` aceptarCita: solicitud ${solicitud._id} no tiene vehiculoId. Saltando validación al guardar.`);
     }
     // Evitar que una validación de esquema previa (p.ej. campos requeridos faltantes)
     // bloquee la operación de aceptación. Usamos validateBeforeSave: false
@@ -153,12 +153,12 @@ exports.aceptarCita = async (req, res) => {
       }
     }
 
-    // 📬 Notificar al cliente que su cita fue aceptada
+    //  Notificar al cliente que su cita fue aceptada
     try {
       const clienteId = solicitud.clienteId._id || solicitud.clienteId;
       const mecanicoNombre = solicitud.mecanicoId.nombre || solicitud.mecanicoId;
       
-      console.log('🔍 Debug aceptar cita:', {
+      console.log(' Debug aceptar cita:', {
         clienteId,
         mecanicoNombre,
         fecha: new Date(solicitud.fecha).toLocaleDateString()
@@ -166,14 +166,14 @@ exports.aceptarCita = async (req, res) => {
       
       await crearNotificacion(
         clienteId,
-        "✅ Cita Aceptada",
+        "Cita Aceptada",
         `El mecánico ${mecanicoNombre} ha aceptado tu solicitud de cita para el ${new Date(solicitud.fecha).toLocaleDateString()}`,
         "cita",
         solicitud._id
       );
-      console.log('✅ Notificación de aceptación enviada');
+      console.log(' Notificación de aceptación enviada');
     } catch (err) {
-      console.error("❌ Error al notificar aceptación de cita:", err);
+      console.error(" Error al notificar aceptación de cita:", err);
     }
 
     res.json({
@@ -183,13 +183,13 @@ exports.aceptarCita = async (req, res) => {
       erroresCreacion: erroresCreacion.length ? erroresCreacion : undefined
     });
   } catch (error) {
-    console.error("🔥 ERROR aceptarCita:", error);
+    console.error(" Error aceptarCita:", error);
     res.status(500).json({ mensaje: "Error al aceptar cita", error: error.message });
   }
 };
 
 // =====================================================================
-// ❌ Rechazar cita
+//  Rechazar cita
 // =====================================================================
 exports.rechazarCita = async (req, res) => {
   try {
@@ -212,30 +212,30 @@ exports.rechazarCita = async (req, res) => {
       const clienteId = solicitud.clienteId._id || solicitud.clienteId;
       const mecanicoNombre = solicitud.mecanicoId.nombre || solicitud.mecanicoId;
 
-      console.log('🔍 Debug rechazar cita:', { clienteId, mecanicoNombre });
+      console.log(' Debug rechazar cita:', { clienteId, mecanicoNombre });
 
       await crearNotificacion(
         clienteId,
-        "❌ Cita Rechazada",
+        "Cita Rechazada",
         `El mecánico ${mecanicoNombre} ha rechazado tu solicitud de cita. Por favor intenta con otro mecánico.`,
         "cita",
         solicitud._id
       );
 
-      console.log('✅ Notificación de rechazo enviada');
+      console.log(' Notificación de rechazo enviada');
     } catch (err) {
-      console.error("❌ Error al notificar rechazo de cita:", err);
+      console.error(" Error al notificar rechazo de cita:", err);
     }
 
     res.json({ mensaje: "Cita rechazada", solicitud });
   } catch (error) {
-    console.error("🔥 ERROR rechazarCita:", error);
+    console.error(" ERROR rechazarCita:", error);
     res.status(500).json({ mensaje: "Error al rechazar cita", error: error.message });
   }
 };
 
 // =====================================================================
-// ✅ Finalizar servicio(s)
+//  Finalizar servicio(s)
 // =====================================================================
 exports.finalizarServicio = async (req, res) => {
   try {
@@ -249,13 +249,13 @@ exports.finalizarServicio = async (req, res) => {
 
     res.json({ mensaje: "Servicios finalizados correctamente" });
   } catch (error) {
-    console.error("❌ Error en finalizarServicio:", error);
+    console.error(" Error en finalizarServicio:", error);
     res.status(500).json({ mensaje: "Error al finalizar servicio", error: error.message });
   }
 };
 
 // =====================================================================
-// ✅ Obtener solicitudes de un mecánico
+//  Obtener solicitudes de un mecánico
 // =====================================================================
 exports.obtenerCitasDeMecanico = async (req, res) => {
   try {
@@ -271,7 +271,7 @@ exports.obtenerCitasDeMecanico = async (req, res) => {
 };
 
 // =====================================================================
-// ✅ Obtener citas/servicios de un cliente (PENDIENTES Y NO COMPLETADAS)
+//  Obtener citas/servicios de un cliente (PENDIENTES Y NO COMPLETADAS)
 // =====================================================================
 exports.obtenerCitasDelCliente = async (req, res) => {
   try {
@@ -300,7 +300,7 @@ exports.obtenerCitasDelCliente = async (req, res) => {
 };
 
 // =====================================================================
-// ✅ Obtener solicitud por ID
+//  Obtener solicitud por ID
 // =====================================================================
 exports.obtenerSolicitudPorId = async (req, res) => {
   try {
@@ -314,13 +314,13 @@ exports.obtenerSolicitudPorId = async (req, res) => {
 
     res.json(solicitud);
   } catch (error) {
-    console.error("❌ Error obtenerSolicitudPorId:", error);
+    console.error(" Error obtenerSolicitudPorId:", error);
     res.status(500).json({ mensaje: "Error al obtener solicitud", error: error.message });
   }
 };
 
 // =====================================================================
-// ✅ Cancelar cita (cliente)
+//  Cancelar cita (cliente)
 // =====================================================================
 exports.cancelarCita = async (req, res) => {
   try {
@@ -345,7 +345,7 @@ exports.cancelarCita = async (req, res) => {
     }
 
     // ================================
-    // ✅ Actualizar sin validar campos requeridos
+    //  Actualizar sin validar campos requeridos
     // ================================
     const solicitudActualizada = await Solicitud.findByIdAndUpdate(
       solicitud._id,
@@ -374,7 +374,7 @@ exports.cancelarCita = async (req, res) => {
 
 
 // =====================================================================
-// ✅ Reprogramar cita (cliente)
+// Reprogramar cita (cliente)
 // =====================================================================
 exports.reprogramarCita = async (req, res) => {
   try {
@@ -407,7 +407,7 @@ exports.reprogramarCita = async (req, res) => {
       return res.status(404).json({ mensaje: "Solicitud asociada no encontrada" });
     }
 
-    // ✅ Validar que la nueva fecha no sea anterior a la fecha actual de la cita
+    //  Validar que la nueva fecha no sea anterior a la fecha actual de la cita
     const fechaActualCita = new Date(solicitud.fecha);
     const nuevaFecha = new Date(fecha);
 
@@ -436,7 +436,7 @@ exports.reprogramarCita = async (req, res) => {
       const mecanicoId = solicitud.mecanicoId._id || solicitud.mecanicoId;
       const clienteNombre = solicitud.clienteId.nombre || solicitud.clienteId;
       
-      console.log('🔍 Debug reprogramación:', {
+      console.log(' Debug reprogramación:', {
         mecanicoId,
         clienteNombre,
         fecha: fechaFormato,
@@ -445,14 +445,14 @@ exports.reprogramarCita = async (req, res) => {
       
       await crearNotificacion(
         mecanicoId,
-        "📅 Cita Reprogramada",
+        " Cita Reprogramada",
         `${clienteNombre} ha reprogramado la cita. Nueva fecha: ${fechaFormato} a las ${hora}. (Anterior: ${new Date(fechaAnterior).toLocaleDateString("es-ES")} a las ${horaAnterior})`,
         "cita",
         solicitud._id
       );
-      console.log('✅ Notificación de reprogramación enviada');
+      console.log(' Notificación de reprogramación enviada');
     } catch (err) {
-      console.error("❌ Error al notificar reprogramación de cita:", err);
+      console.error(" Error al notificar reprogramación de cita:", err);
     }
 
     console.log('[reprogramarCita] Cita reprogramada exitosamente:', solicitud._id);
@@ -461,7 +461,7 @@ exports.reprogramarCita = async (req, res) => {
       solicitud 
     });
   } catch (error) {
-    console.error("❌ Error reprogramarCita:", error);
+    console.error(" Error reprogramarCita:", error);
     res.status(500).json({ error: error.message });
   }
 };

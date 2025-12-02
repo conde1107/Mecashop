@@ -9,19 +9,19 @@ const Sidebar = () => {
       <h2 className="sidebar-title">MecaShop</h2>
       <ul className="sidebar-menu">
         <li>
-          <Link to="/dashboard">📊 Dashboard</Link>
+          <Link to="/dashboard"> Dashboard</Link>
         </li>
         <li>
-          <Link to="/products">🛒 Productos</Link>
+          <Link to="/products"> Productos</Link>
         </li>
         <li>
-          <Link to="/admin">⚙️ Admin Panel</Link>
+          <Link to="/admin"> Admin Panel</Link>
         </li>
         <li>
-          <Link to="/login">🔑 Login</Link>
+          <Link to="/login"> Login</Link>
         </li>
         <li>
-          <Link to="/register">📝 Registro</Link>
+          <Link to="/register"> Registro</Link>
         </li>
       </ul>
     </div>

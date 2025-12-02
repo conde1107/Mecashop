@@ -6,7 +6,7 @@ const Producto = require("../models/producto");
 const WOMPI_API = "https://sandbox.wompi.co/v1";
 const WOMPI_PRIVATE_KEY = process.env.WOMPI_PRIVATE_KEY;
 
-// 📌 Validar stock disponible
+//  Validar stock disponible
 async function validarStock(items) {
   const erroresStock = [];
 
@@ -41,7 +41,7 @@ async function validarStock(items) {
   return erroresStock;
 }
 
-// 📌 Actualizar stock después de compra exitosa
+//  Actualizar stock después de compra exitosa
 async function actualizarStock(items) {
   try {
     for (const item of items) {
@@ -58,7 +58,7 @@ async function actualizarStock(items) {
   }
 }
 
-// 📌 Validar stock (endpoint público)
+//  Validar stock (endpoint público)
 exports.validarStockEndpoint = async (req, res) => {
   try {
     const { items } = req.body;
@@ -86,7 +86,7 @@ exports.validarStockEndpoint = async (req, res) => {
   }
 };
 
-// 📌 Crear transacción de pago (para Checkout)
+//  Crear transacción de pago (para Checkout)
 exports.crearPago = async (req, res) => {
   try {
     const { amount, reference, description, tipoPago, items, metodoPago } = req.body;
@@ -105,7 +105,7 @@ exports.crearPago = async (req, res) => {
       return res.status(404).json({ msg: "Usuario no encontrado" });
     }
 
-    // 🔍 VALIDAR STOCK
+    //  VALIDAR STOCK
     if (items && items.length > 0) {
       const erroresStock = await validarStock(items);
       
@@ -148,7 +148,7 @@ exports.crearPago = async (req, res) => {
   }
 };
 
-// 📌 Procesar pago con token (para Tarjeta)
+//  Procesar pago con token (para Tarjeta)
 exports.procesarPagoTarjeta = async (req, res) => {
   try {
     const { token, email, amount, reference, description, tipoPago } = req.body;
@@ -197,7 +197,7 @@ exports.procesarPagoTarjeta = async (req, res) => {
   }
 };
 
-// 📌 Procesar pago Nequi
+// Procesar pago Nequi
 exports.procesarPagoNequi = async (req, res) => {
   try {
     const { phone, email, amount, reference, description } = req.body;
@@ -239,7 +239,7 @@ exports.procesarPagoNequi = async (req, res) => {
 
     res.json({ success: true, transaction: transactionData });
   } catch (error) {
-    console.error("❌ Error en procesarPagoNequi:", error.response?.data || error.message);
+    console.error(" Error en procesarPagoNequi:", error.response?.data || error.message);
     res.status(500).json({ 
       msg: "Error procesando pago Nequi", 
       error: error.response?.data || error.message 
@@ -247,7 +247,7 @@ exports.procesarPagoNequi = async (req, res) => {
   }
 };
 
-// 📌 Procesar pago PSE
+//  Procesar pago PSE
 exports.procesarPagoPSE = async (req, res) => {
   try {
     const { email, amount, reference, description, document, name } = req.body;
@@ -291,7 +291,7 @@ exports.procesarPagoPSE = async (req, res) => {
 
     res.json({ success: true, transaction: transactionData });
   } catch (error) {
-    console.error("❌ Error en procesarPagoPSE:", error.response?.data || error.message);
+    console.error(" Error en procesarPagoPSE:", error.response?.data || error.message);
     res.status(500).json({ 
       msg: "Error procesando pago PSE", 
       error: error.response?.data || error.message 
@@ -302,7 +302,7 @@ exports.procesarPagoPSE = async (req, res) => {
 // 📌 Webhook de Wompi
 exports.webhookWompi = async (req, res) => {
   try {
-    console.log("🔔 Webhook recibido de Wompi:", JSON.stringify(req.body, null, 2));
+    console.log(" Webhook recibido de Wompi:", JSON.stringify(req.body, null, 2));
 
     const event = req.body;
 
@@ -327,28 +327,28 @@ exports.webhookWompi = async (req, res) => {
     );
 
     if (!pago) {
-      console.warn("⚠️ Pago no encontrado para reference:", reference);
+      console.warn(" Pago no encontrado para reference:", reference);
       return res.sendStatus(200);
     }
 
-    // 🎯 SI EL PAGO FUE APROBADO, ACTUALIZAR STOCK
+    // SI EL PAGO FUE APROBADO, ACTUALIZAR STOCK
     if (transactionData.status === "APPROVED" && pago.items.length > 0) {
-      console.log("✅ Pago aprobado, actualizando stock...");
+      console.log(" Pago aprobado, actualizando stock...");
       
       const stockActualizado = await actualizarStock(pago.items);
       
       if (stockActualizado) {
-        console.log(`✅ Stock actualizado para pedido ${reference}`);
+        console.log(` Stock actualizado para pedido ${reference}`);
       } else {
-        console.warn(`⚠️ Error actualizando stock para pedido ${reference}`);
+        console.warn(` Error actualizando stock para pedido ${reference}`);
       }
     }
 
-    console.log(`✅ Pago ${reference} actualizado a estado: ${transactionData.status}`);
+    console.log(` Pago ${reference} actualizado a estado: ${transactionData.status}`);
 
     res.sendStatus(200);
   } catch (error) {
-    console.error("❌ Error en webhook:", error);
+    console.error(" Error en webhook:", error);
     res.sendStatus(200); // Wompi espera 200 de todas formas
   }
 };

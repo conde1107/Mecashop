@@ -10,8 +10,8 @@ const verifyToken = require('../middleware/auth');
 const { 
   crearProducto, 
   obtenerProductos, 
-  obtenerProductoPorId,   // ✅ Importar
-  actualizarProducto,     // ✅ Importar
+  obtenerProductoPorId,   // Importar
+  actualizarProducto,     //  Importar
   eliminarProducto 
 } = require('../controllers/productos');
 

@@ -182,13 +182,13 @@ const subirImagen = async () => {
       headers: {
         Authorization: `Bearer ${token}`, // si usas token de autenticación
       },
-      body: formData, // 👈 IMPORTANTE: sin JSON, sin Content-Type manual
+      body: formData, 
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      alert("✅ Imagen actualizada correctamente");
+      alert(" Imagen actualizada correctamente");
       setPerfil((prev) => ({ ...prev, imagen: data.imagen || prev.imagen }));
       setImagenSeleccionada(null);
       if (previewImagen) URL.revokeObjectURL(previewImagen);
@@ -198,7 +198,7 @@ const subirImagen = async () => {
     }
   } catch (error) {
     console.error("Error al subir imagen:", error);
-    alert("❌ Error de conexión");
+    alert(" Error de conexión");
   } finally {
     setSubiendoImagen(false);
   }
@@ -243,10 +243,10 @@ const subirImagen = async () => {
       const usuarioActualizado = data.usuario || data;
       setPerfil((prev) => ({ ...prev, ...usuarioActualizado }));
       setEditando(false);
-      alert("✅ Perfil actualizado correctamente");
+      alert("Perfil actualizado correctamente");
     } catch (error) {
       console.error("Error al actualizar perfil:", error);
-      alert("❌ No se pudo actualizar el perfil");
+      alert(" No se pudo actualizar el perfil");
     }
   };
 
@@ -263,15 +263,15 @@ const subirImagen = async () => {
 
       if (data && typeof data.disponible === "boolean") {
         setPerfil((prev) => ({ ...prev, disponible: data.disponible }));
-        alert(data.mensaje || "✅ Disponibilidad actualizada");
+        alert(data.mensaje || " Disponibilidad actualizada");
       } else {
         setPerfil((prev) => ({ ...prev, disponible: nuevoValor }));
-        alert("✅ Disponibilidad actualizada");
+        alert(" Disponibilidad actualizada");
       }
     } catch (error) {
       console.error("Error al cambiar disponibilidad:", error);
       setPerfil((prev) => ({ ...prev, disponible: !prev.disponible }));
-      alert("❌ No se pudo cambiar la disponibilidad");
+      alert(" No se pudo cambiar la disponibilidad");
     }
   };
 
@@ -291,10 +291,10 @@ const subirImagen = async () => {
         body: JSON.stringify(banco),
       });
       setBanco(data);
-      alert("✅ Datos bancarios guardados correctamente");
+      alert(" Datos bancarios guardados correctamente");
     } catch (error) {
       console.error("Error al guardar datos bancarios:", error);
-      alert("❌ No se pudieron guardar los datos bancarios");
+      alert(" No se pudieron guardar los datos bancarios");
     }
   };
 
@@ -322,10 +322,10 @@ const subirImagen = async () => {
       const oferta = data.oferta || data;
       setServicios((prev) => [...prev, oferta]);
       setNuevoServicio({ nombre: "", descripcion: "", precio: "" });
-      alert("✅ Servicio agregado correctamente");
+      alert(" Servicio agregado correctamente");
     } catch (error) {
       console.error("Error al agregar servicio:", error);
-      alert("❌ No se pudo agregar el servicio");
+      alert(" No se pudo agregar el servicio");
     }
   };
 
@@ -334,7 +334,7 @@ const subirImagen = async () => {
       if (!window.confirm("¿Eliminar servicio? Esta acción no se puede deshacer.")) return;
       await apiFetch(`${API_BASE}/api/mecanicos/${mecanicoId}/ofertas/${id}`, { method: "DELETE" });
       setServicios((prev) => prev.filter((s) => s._id !== id));
-      alert("🗑️ Servicio eliminado");
+      alert(" Servicio eliminado");
     } catch (error) {
       console.error("Error al eliminar servicio:", error);
       alert("❌ No se pudo eliminar el servicio");
